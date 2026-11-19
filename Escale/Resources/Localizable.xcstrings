@@ -969,6 +969,28 @@
         }
       }
     },
+    "Authentification : Mot de passe (Trousseau)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentication: Password (Keychain)"
+          }
+        }
+      }
+    },
+    "Authentification : Par défaut (OpenSSH)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentication: Default (OpenSSH)"
+          }
+        }
+      }
+    },
     "Authentification annulée." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1009,6 +1031,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Allow agent access"
+          }
+        }
+      }
+    },
+    "Autre fichier…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other file…"
           }
         }
       }
@@ -1288,6 +1321,17 @@
         }
       }
     },
+    "Choisir la méthode d'authentification ou une clé SSH pour la connexion rapide." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose the authentication method or an SSH key for Quick Connect."
+          }
+        }
+      }
+    },
     "Choisir les panneaux à diffuser…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1306,6 +1350,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choose Panes…"
+          }
+        }
+      }
+    },
+    "Choisir un fichier de clé…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a key file…"
           }
         }
       }
@@ -4632,6 +4687,17 @@
         }
       }
     },
+    "Oublier" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forget"
+          }
+        }
+      }
+    },
     "Oublier le mot de passe enregistré" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4980,6 +5046,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Passphrase"
+          }
+        }
+      }
+    },
+    "Phrase de passe oubliée." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passphrase forgotten."
           }
         }
       }
@@ -6135,6 +6212,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "An open tunnel keeps the host's connection active."
+          }
+        }
+      }
+    },
+    "Une phrase de passe est enregistrée dans le Trousseau." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A passphrase is saved in Keychain."
           }
         }
       }
