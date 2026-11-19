@@ -96,6 +96,7 @@ final class HostEditorForm {
     }
 
     var account: String { AuthKeychain.passwordAccount(for: hostID) }
+    var passphraseAccount: String { AuthKeychain.passphraseAccount(for: hostID) }
 
     var errors: [String] {
         var e: [String] = []
