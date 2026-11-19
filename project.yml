@@ -5,6 +5,10 @@ options:
     macOS: "15.0"
   createIntermediateGroups: true
   developmentLanguage: fr
+  knownRegions:
+    - fr
+    - en
+    - zh-Hans
   fileTypes:
     # Icone Icon Composer (Liquid Glass) : ressource, pas groupe de sources.
     icon: {file: true, buildPhase: resources}
@@ -51,6 +55,10 @@ targets:
       path: Escale/Info.plist
       properties:
         CFBundleDisplayName: Escale
+        CFBundleLocalizations:
+          - fr
+          - en
+          - zh-Hans
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         SUFeedURL: "$(ESCALE_FEED_URL)"

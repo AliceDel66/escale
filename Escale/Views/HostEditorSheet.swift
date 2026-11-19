@@ -69,7 +69,7 @@ struct HostEditorSheet: View {
             VStack(spacing: 10) {
                 HostEditorBanner(form: form)
                 Picker("Onglet", selection: $form.tab) {
-                    ForEach(form.tabs, id: \.self) { Text($0.title(for: form.connectionProtocol)).tag($0) }
+                    ForEach(form.tabs, id: \.self) { Text($0.titleKey(for: form.connectionProtocol)).tag($0) }
                 }
                 .pickerStyle(.segmented).labelsHidden()
             }
@@ -145,10 +145,6 @@ struct HostEditorSheet: View {
         }
     }
 
-    private var keyDisplayLabel: String {
-        form.keyPath.isEmpty ? String(localized: "Aucun fichier choisi") : SSHKeyDiscovery.abbreviatedPath(form.keyPath)
-    }
-
     private var sshAuthSection: some View {
         Section("Authentification") {
             Picker("Méthode", selection: $form.authChoice) {
@@ -175,19 +171,19 @@ struct HostEditorSheet: View {
                                 Divider()
                                 Button("Autre fichier…") { chooseKey() }
                             } label: {
-                                Text(keyDisplayLabel)
+                                (form.keyPath.isEmpty ? Text("Aucun fichier choisi") : Text(SSHKeyDiscovery.abbreviatedPath(form.keyPath)))
                                     .foregroundStyle(form.keyPath.isEmpty ? .secondary : .primary)
                                     .lineLimit(1).truncationMode(.middle)
                             }
                             .menuStyle(.borderedButton)
-                            .help(form.keyPath.isEmpty ? String(localized: "Aucun fichier choisi") : form.keyPath)
+                            .help(form.keyPath.isEmpty ? Text("Aucun fichier choisi") : Text(verbatim: form.keyPath))
                             .frame(maxWidth: 260, alignment: .trailing)
                         } else {
                             // Chemin long : troncature au milieu (début et nom du fichier restent lisibles), chemin complet en infobulle.
-                            Text(keyDisplayLabel)
+                            (form.keyPath.isEmpty ? Text("Aucun fichier choisi") : Text(SSHKeyDiscovery.abbreviatedPath(form.keyPath)))
                                 .foregroundStyle(form.keyPath.isEmpty ? .secondary : .primary)
                                 .lineLimit(1).truncationMode(.middle)
-                                .help(form.keyPath.isEmpty ? String(localized: "Aucun fichier choisi") : form.keyPath)
+                                .help(form.keyPath.isEmpty ? Text("Aucun fichier choisi") : Text(verbatim: form.keyPath))
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                         }
                         Button("Choisir…") { chooseKey() }

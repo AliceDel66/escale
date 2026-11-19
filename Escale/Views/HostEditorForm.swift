@@ -22,6 +22,16 @@ enum HostEditorTab: Hashable, CaseIterable {
         }
     }
 
+    func titleKey(for p: ConnectionProtocol) -> LocalizedStringKey {
+        switch self {
+        case .basic: "Basique"
+        case .advanced: "Avancé"
+        case .terminal: "Terminal"
+        case .network: "Réseau"
+        case .protocolSettings: p == .rdp ? "RDP" : p.localizedDisplayNameKey
+        }
+    }
+
     var symbolName: String {
         switch self {
         case .basic: "person.text.rectangle"

@@ -105,13 +105,13 @@ private struct StatusText: View {
         }
     }
 
-    private var label: String {
+    private var label: LocalizedStringKey {
         switch status {
-        case .running: String(localized: "actif")
-        case .connecting: String(localized: "connexion…")
-        case .reconnecting: String(localized: "reconnexion…")
-        case .failed: String(localized: "échec")
-        case .ended: String(localized: "terminé")
+        case .running: "actif"
+        case .connecting: "connexion…"
+        case .reconnecting: "reconnexion…"
+        case .failed: "échec"
+        case .ended: "terminé"
         }
     }
 }

@@ -63,6 +63,7 @@ struct MainWindowView: View {
         }
         .background(WindowAccessor { model.mainWindow = $0; ToolbarDefaults.apply(to: $0); model.compact.applyToolbar(to: $0) })
         .modifier(FeatureScenes(model: model))
+        .environment(\.locale, model.settings.effectiveLocale)
     }
 
     private var otherSheetOpen: Bool {

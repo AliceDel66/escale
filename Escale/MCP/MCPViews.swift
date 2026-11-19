@@ -19,6 +19,7 @@ final class MCPConfirmationPanel {
             return
         }
         let p = panel ?? makePanel()
+        p.title = AppLanguage.localized("Action d'un agent", for: feature.model?.settings.language ?? .system)
         panel = p
         p.orderFrontRegardless()
         NSApp.requestUserAttention(.informationalRequest)
@@ -27,7 +28,7 @@ final class MCPConfirmationPanel {
     private func makePanel() -> NSPanel {
         let p = NSPanel(contentRect: NSRect(x: 0, y: 0, width: 460, height: 260),
                         styleMask: [.titled, .nonactivatingPanel, .fullSizeContentView], backing: .buffered, defer: false)
-        p.title = String(localized: "Action d'un agent")
+        p.title = AppLanguage.localized("Action d'un agent", for: feature.model?.settings.language ?? .system)
         p.level = .floating
         p.hidesOnDeactivate = false
         p.isReleasedWhenClosed = false
@@ -44,36 +45,40 @@ struct MCPConfirmationView: View {
     let feature: MCPFeature
 
     var body: some View {
-        if let c = feature.pending.first {
-            VStack(alignment: .leading, spacing: 10) {
-                Label {
-                    Text("\(c.client) demande : \(Self.title(c.tool))")
-                        .font(.headline)
-                } icon: { Image(systemName: "sparkles") }
-                Text("Hôte : \(c.hostName)").foregroundStyle(.secondary)
-                ScrollView {
-                    Text(c.detail.isEmpty ? " " : c.detail)
-                        .font(.system(.body, design: .monospaced))
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(8)
-                }
-                .frame(minHeight: 60, maxHeight: 140)
-                .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 6))
-                HStack {
-                    if feature.pending.count > 1 {
-                        Text("\(feature.pending.count - 1) autre(s) demande(s) en attente").font(.caption).foregroundStyle(.secondary)
+        let language = feature.model?.settings.language ?? .system
+        Group {
+            if let c = feature.pending.first {
+                VStack(alignment: .leading, spacing: 10) {
+                    Label {
+                        Text("\(c.client) demande : \(Self.title(c.tool, for: language))")
+                            .font(.headline)
+                    } icon: { Image(systemName: "sparkles") }
+                    Text("Hôte : \(c.hostName)").foregroundStyle(.secondary)
+                    ScrollView {
+                        Text(c.detail.isEmpty ? " " : c.detail)
+                            .font(.system(.body, design: .monospaced))
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(8)
                     }
-                    Spacer()
-                    Button("Refuser") { feature.respond(c.id, approved: false) }
-                        .keyboardShortcut(.cancelAction)
-                    Button("Autoriser") { feature.respond(c.id, approved: true) }
-                        .keyboardShortcut(.defaultAction)
+                    .frame(minHeight: 60, maxHeight: 140)
+                    .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 6))
+                    HStack {
+                        if feature.pending.count > 1 {
+                            Text("\(feature.pending.count - 1) autre(s) demande(s) en attente").font(.caption).foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Button("Refuser") { feature.respond(c.id, approved: false) }
+                            .keyboardShortcut(.cancelAction)
+                        Button("Autoriser") { feature.respond(c.id, approved: true) }
+                            .keyboardShortcut(.defaultAction)
+                    }
                 }
+                .padding(16)
+                .frame(width: 460)
             }
-            .padding(16)
-            .frame(width: 460)
         }
+        .environment(\.locale, feature.model?.settings.effectiveLocale ?? .current)
     }
 
     static func title(_ t: MCPCatalog.Tool) -> String {
@@ -91,6 +96,24 @@ struct MCPConfirmationView: View {
         case .listHosts: String(localized: "lister les hôtes")
         case .listSessions: String(localized: "lister les sessions")
         }
+    }
+
+    static func title(_ t: MCPCatalog.Tool, for language: AppLanguage) -> String {
+        let key: String = switch t {
+        case .exec: "exécuter une commande"
+        case .connectHost: "ouvrir la connexion SSH"
+        case .sendInput: "saisir dans un terminal"
+        case .writeFile: "écrire un fichier"
+        case .startTunnel: "ouvrir un tunnel"
+        case .stopTunnel: "fermer un tunnel"
+        case .readFile: "lire un fichier"
+        case .listFiles: "lister un dossier"
+        case .readTerminal: "lire un terminal"
+        case .listTunnels: "lister les tunnels"
+        case .listHosts: "lister les hôtes"
+        case .listSessions: "lister les sessions"
+        }
+        return AppLanguage.localized(key, for: language)
     }
 }
 
@@ -299,7 +322,7 @@ struct MCPSettingsView: View {
                 set: { feature.setHostAccess($0, for: host) }
             )) {
                 ForEach(AgentAccess.allCases, id: \.self) { access in
-                    Text(AgentAccessEditorSection.label(access)).tag(access)
+                    Text(AgentAccessEditorSection.labelKey(access)).tag(access)
                 }
             }
             .labelsHidden()
@@ -323,8 +346,8 @@ struct MCPSettingsView: View {
         if let e = feature.serverError {
             Label(e, systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)
         } else if feature.isRunning {
-            Label(feature.clientCount == 0 ? String(localized: "En écoute, aucun agent connecté")
-                  : String(localized: "\(feature.clientCount) agent(s) connecté(s)"), systemImage: "dot.radiowaves.left.and.right")
+            Label(feature.clientCount == 0 ? LocalizedStringKey("En écoute, aucun agent connecté")
+                  : LocalizedStringKey("\(feature.clientCount) agent(s) connecté(s)"), systemImage: "dot.radiowaves.left.and.right")
                 .foregroundStyle(.green)
         } else {
             Label("Désactivé", systemImage: "pause.circle").foregroundStyle(.secondary)
@@ -406,9 +429,27 @@ struct AgentAccessEditorSection: View {
     var body: some View {
         Section {
             Picker("Accès des agents (MCP)", selection: $access) {
-                ForEach(AgentAccess.allCases, id: \.self) { a in Text(Self.label(a)).tag(a) }
+                ForEach(AgentAccess.allCases, id: \.self) { a in Text(Self.labelKey(a)).tag(a) }
             }
-            Text(Self.help(access)).font(.caption).foregroundStyle(.secondary)
+            Text(Self.helpKey(access)).font(.caption).foregroundStyle(.secondary)
+        }
+    }
+
+    static func labelKey(_ a: AgentAccess) -> LocalizedStringKey {
+        switch a {
+        case .none: "Aucun"
+        case .read: "Lecture seule"
+        case .confirm: "Actions avec confirmation"
+        case .full: "Actions sans confirmation"
+        }
+    }
+
+    static func helpKey(_ a: AgentAccess) -> LocalizedStringKey {
+        switch a {
+        case .none: "Hôte invisible pour les agents IA."
+        case .read: "Les agents lisent les terminaux, fichiers et tunnels, sans rien modifier."
+        case .confirm: "Chaque commande, saisie, écriture ou tunnel attend votre accord."
+        case .full: "Les agents agissent sans demander (actions journalisées). À réserver aux machines de test."
         }
     }
 
