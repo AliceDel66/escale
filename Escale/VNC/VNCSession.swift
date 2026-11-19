@@ -264,7 +264,7 @@ final class VNCSession: Identifiable {
             link = model.connections.connection(for: via).acquireLink()
             self.link = link
         }
-        do { try await link.ensureConnected() } catch { throw VNCSessionError("Tunnel SSH : \(link.message(for: error))") }
+        do { try await link.ensureConnected() } catch { throw VNCSessionError(String(localized: "Tunnel SSH : \(link.message(for: error))")) }
         let controller = self.controller ?? TunnelController(transport: link.transport)
         self.controller = controller
         guard let local = Self.freeLocalPort() else { throw VNCSessionError(String(localized: "Aucun port local libre pour le tunnel.")) }
@@ -272,7 +272,7 @@ final class VNCSession: Identifiable {
         phase = .connecting(String(localized: "Ouverture du tunnel vers \(host.host):\(port)…"))
         let state = await controller.start(spec)
         guard state == .active else {
-            if case .failed(let m) = state { throw VNCSessionError("Tunnel SSH : \(m)") }
+            if case .failed(let m) = state { throw VNCSessionError(String(localized: "Tunnel SSH : \(m)")) }
             throw VNCSessionError(String(localized: "Tunnel SSH non établi."))
         }
         tunnelSpec = spec

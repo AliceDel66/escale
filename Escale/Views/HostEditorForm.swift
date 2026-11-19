@@ -109,7 +109,7 @@ final class HostEditorForm {
         [authChoice == .keyFile ? HostFormValidation.keyPath(keyPath) : nil,
          HostFormValidation.jumpHosts(jumpHosts)].forEach { if let m = $0 { e.append(m) } }
         if let m = StartupCommand.validationMessage(startupCommand) { e.append(m) }
-        e += TunnelValidation.listErrors(tunnels) + tunnels.filter { !TunnelValidation.errors($0).isEmpty }.map { "Tunnel « \($0.title) » invalide." }
+        e += TunnelValidation.listErrors(tunnels) + tunnels.filter { !TunnelValidation.errors($0).isEmpty }.map { String(localized: "Tunnel « \($0.title) » invalide.") }
         return e
     }
 
@@ -153,7 +153,7 @@ final class HostEditorForm {
 struct HostEditorBanner: View {
     @Bindable var form: HostEditorForm
 
-    static func shortName(_ p: ConnectionProtocol) -> String { p == .rdp ? "RDP" : p.displayName }
+    static func shortName(_ p: ConnectionProtocol) -> String { p == .rdp ? "RDP" : p.localizedDisplayName }
 
     var body: some View {
         HStack(spacing: 6) {
@@ -163,7 +163,7 @@ struct HostEditorBanner: View {
                     VStack(spacing: 4) {
                         Image(systemName: p.symbolName).font(.system(size: 26, weight: .regular))
                             .frame(height: 30)
-                        Text(Self.shortName(p)).font(.callout)
+                        Text(p == .rdp ? LocalizedStringKey("RDP") : p.localizedDisplayNameKey).font(.callout)
                     }
                     .frame(maxWidth: .infinity).padding(.vertical, 8)
                     .foregroundStyle(selected ? Color.accentColor : Color.primary)
@@ -172,8 +172,8 @@ struct HostEditorBanner: View {
                     .contentShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .buttonStyle(.plain)
-                .help(p.displayName)
-                .accessibilityLabel(p.displayName)
+                .help(p.localizedDisplayNameKey)
+                .accessibilityLabel(p.localizedDisplayNameKey)
                 .accessibilityAddTraits(selected ? .isSelected : [])
             }
         }

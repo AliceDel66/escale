@@ -156,8 +156,8 @@ private struct BroadcastSheet: View {
         }
     }
     private var problem: String? {
-        guard let s = scope else { return "Aucun onglet ouvert." }
-        return feature.members(of: s).count < 2 ? "Il faut au moins deux panneaux." : nil
+        guard let s = scope else { return String(localized: "Aucun onglet ouvert.") }
+        return feature.members(of: s).count < 2 ? String(localized: "Il faut au moins deux panneaux.") : nil
     }
     private func start() {
         guard let s = scope else { return }
@@ -244,12 +244,12 @@ private struct ExecSheet: View {
 
     private var targetsMenu: some View {
         Menu("Cibles") {
-            Button("Hôtes connectés") { feature.retarget(feature.connectedHosts, source: "Hôtes connectés") }
+            Button("Hôtes connectés") { feature.retarget(feature.connectedHosts, source: String(localized: "Hôtes connectés")) }
                 .disabled(feature.connectedHosts.isEmpty)
             if let lib = feature.model?.library {
                 Menu("Dossier (récursif)") {
                     ForEach(lib.allFolderPaths, id: \.id) { f in
-                        Button(f.path) { feature.retarget(feature.hosts(inFolder: f.id), source: "Dossier « \(f.path) »") }
+                        Button(f.path) { feature.retarget(feature.hosts(inFolder: f.id), source: String(localized: "Dossier « \(f.path) »")) }
                             .disabled(feature.hosts(inFolder: f.id).isEmpty)
                     }
                 }

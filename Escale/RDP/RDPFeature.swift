@@ -89,7 +89,7 @@ final class RDPFeature: AppFeature {
                             message: String(localized: "Escale lance le client Bureau à distance de Microsoft (« Windows App »), qui n'est pas installé. Vous pouvez l'installer depuis l'App Store."))
         } catch is CancellationError {
         } catch {
-            notice = Notice(kind: .error, title: "Impossible d'ouvrir « \(host.name) »", message: "\(error)")
+            notice = Notice(kind: .error, title: String(localized: "Impossible d'ouvrir « \(host.name) »"), message: "\(error)")
         }
     }
 
@@ -145,7 +145,7 @@ final class RDPFeature: AppFeature {
             let state = await controller.start(spec)
             guard state == .active else {
                 if case .failed(let m) = state { throw RDPFeatureError.tunnel(m) }
-                throw RDPFeatureError.tunnel("ouverture impossible")
+                throw RDPFeatureError.tunnel(String(localized: "ouverture impossible"))
             }
             let t = OpenTunnel(spec: spec, controller: controller, link: link)
             tunnels[host.id] = t
@@ -205,7 +205,7 @@ final class RDPFeature: AppFeature {
         panel.message = String(localized: "Fichier .rdp sans mot de passe, vers l'adresse enregistrée de l'hôte.")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do { try export(host, to: url) } catch {
-            notice = Notice(kind: .error, title: "Export impossible", message: "\(error)")
+            notice = Notice(kind: .error, title: String(localized: "Export impossible"), message: "\(error)")
         }
     }
 

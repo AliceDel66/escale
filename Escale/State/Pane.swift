@@ -44,7 +44,7 @@ final class Pane: Identifiable {
 
     init(kind: Kind, baseTitle: String, session: TerminalSession = TerminalSession()) {
         self.kind = kind; self.baseTitle = baseTitle; self.session = session
-        session.engine.accessibilityLabel = "Terminal — \(baseTitle)"
+        session.engine.accessibilityLabel = String(localized: "Terminal — \(baseTitle)")
     }
 
     var hostID: UUID? { if case .host(let h) = kind { h.id } else { nil } }
@@ -60,10 +60,10 @@ final class Pane: Identifiable {
         case .ended: return session.statusText
         case .reconnecting:
             if case .reconnecting(let attempt, let retryIn)? = link?.state {
-                if let s = retryIn { return "Connexion perdue — nouvelle tentative dans \(s) s" }
+                if let s = retryIn { return String(localized: "Connexion perdue — nouvelle tentative dans \(s) s") }
                 return String(localized: "Connexion perdue — reconnexion en cours (tentative \(attempt))…")
             }
-            return "Connexion perdue — reconnexion…"
+            return String(localized: "Connexion perdue — reconnexion…")
         }
     }
 }

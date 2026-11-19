@@ -100,14 +100,14 @@ final class MacroFeature: AppFeature {
         do { library = try await repository.load(); isLoaded = true }
         catch {
             isLoaded = true
-            notice = MacroNotice(title: "Macros illisibles", message: Self.describe(error))
+            notice = MacroNotice(title: String(localized: "Macros illisibles"), message: Self.describe(error))
         }
     }
 
     private func persist() async -> Bool {
         guard let repository else { return false }
         do { try await repository.save(library); return true }
-        catch { notice = MacroNotice(title: "Enregistrement impossible", message: Self.describe(error)); return false }
+        catch { notice = MacroNotice(title: String(localized: "Enregistrement impossible"), message: Self.describe(error)); return false }
     }
 
     static func describe(_ error: Error) -> String {
@@ -141,7 +141,7 @@ final class MacroFeature: AppFeature {
     }
 
     func newDraft(scope: MacroScope? = nil) {
-        draft = Macro(name: "Nouvelle macro", steps: [.text("")], scope: scope ?? .global)
+        draft = Macro(name: String(localized: "Nouvelle macro"), steps: [.text("")], scope: scope ?? .global)
         draftIsNew = true
     }
 
@@ -169,7 +169,7 @@ final class MacroFeature: AppFeature {
         let panes = allPanes ? tab.panes : [tab.activePane]
         let targets = panes.filter { $0.session.state == .running }
         guard !targets.isEmpty else {
-            notice = MacroNotice(title: "Macro « \(macro.name) »", message: String(localized: "Le panneau actif n'a pas de session en cours."))
+            notice = MacroNotice(title: String(localized: "Macro « \(macro.name) »"), message: String(localized: "Le panneau actif n'a pas de session en cours."))
             return nil
         }
         let token = UUID()
@@ -224,7 +224,7 @@ final class MacroFeature: AppFeature {
         recorder = MacroRecorder()
         guard keep else { return }
         guard !steps.isEmpty else {
-            notice = MacroNotice(title: "Enregistrement vide", message: String(localized: "Aucune saisie n'a été capturée."))
+            notice = MacroNotice(title: String(localized: "Enregistrement vide"), message: String(localized: "Aucune saisie n'a été capturée."))
             return
         }
         draft = Macro(name: String(localized: "Macro enregistrée"), steps: steps, scope: hostID.map { .host($0) } ?? .global)
@@ -241,7 +241,7 @@ final class MacroFeature: AppFeature {
     /// Lance `command` sur l'hôte, sur la connexion maître existante (ouverte au besoin), avec la redirection X11.
     /// Attend `settle` secondes : un programme qui s'arrête dans ce délai est rapporté avec sa sortie d'erreur.
     func launchX11(host: HostProfile, command: String, settle: Double = 1.5) async -> X11LaunchOutcome {
-        guard let model else { return .failed("Application indisponible.") }
+        guard let model else { return .failed(String(localized: "Application indisponible.")) }
         let cmd: String
         switch X11LaunchCommand.validate(command) {
         case .failure(let e): return .failed(e.message)
@@ -324,7 +324,7 @@ final class MacroFeature: AppFeature {
                 if let d = X11LaunchDiagnostic.refusalWhileRunning(output: output) {
                     notice = MacroNotice(title: d.title, message: d.message)
                 }
-            case .failed(let m): notice = MacroNotice(title: "Application X11", message: m)
+            case .failed(let m): notice = MacroNotice(title: String(localized: "Application X11"), message: m)
             case .exited(let code, let output):
                 let d = X11LaunchDiagnostic.diagnose(code: code, output: output)
                 notice = MacroNotice(title: d.title, message: d.message)

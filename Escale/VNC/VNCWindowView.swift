@@ -73,7 +73,7 @@ struct VNCToolbar: View {
     static func statusText(desktopName: String, hostName: String, size: CGSize) -> String {
         let dims = String(localized: "\(Int(size.width))×\(Int(size.height))")
         let name = desktopName.trimmingCharacters(in: .whitespacesAndNewlines)
-        return name.isEmpty || name == hostName ? dims : "Bureau : \(name) — \(dims)"
+        return name.isEmpty || name == hostName ? dims : String(localized: "Bureau : \(name) — \(dims)")
     }
 
     private func openScreenSharing() {

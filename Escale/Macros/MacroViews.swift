@@ -156,8 +156,8 @@ struct MacroManagerView: View {
 
     private func scopeLabel(_ s: MacroScope) -> String {
         switch s {
-        case .global: "Tous les hôtes"
-        case .host(let id): model.library.library.hosts.first { $0.id == id }.map { "Hôte : \($0.name)" } ?? String(localized: "Hôte supprimé")
+        case .global: String(localized: "Tous les hôtes")
+        case .host(let id): model.library.library.hosts.first { $0.id == id }.map { String(localized: "Hôte : \($0.name)") } ?? String(localized: "Hôte supprimé")
         }
     }
 }

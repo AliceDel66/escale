@@ -47,7 +47,7 @@ final class TelnetFeature: AppFeature {
             let state = await controller.start(spec)
             guard state == .active else {
                 if case .failed(let m) = state { throw TelnetFeatureError.tunnel(m) }
-                throw TelnetFeatureError.tunnel("ouverture impossible")
+                throw TelnetFeatureError.tunnel(String(localized: "ouverture impossible"))
             }
             activeTunnelPorts.insert(local)
             do {
@@ -80,7 +80,7 @@ enum TelnetFeatureError: Error, CustomStringConvertible {
 
     var description: String {
         switch self {
-        case .unavailable: "Telnet : module indisponible."
+        case .unavailable: String(localized: "Telnet : module indisponible.")
         case .invalid(let m): m
         case .viaHostMissing: String(localized: "L'hôte SSH intermédiaire n'existe plus : choisissez-en un autre dans l'éditeur.")
         case .noLocalPort: String(localized: "Aucun port local libre pour le tunnel.")

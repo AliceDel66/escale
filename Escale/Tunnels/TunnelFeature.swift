@@ -85,7 +85,7 @@ final class TunnelFeature: AppFeature {
         } catch {
             ctx.wanted.remove(spec.id)
             releaseIfIdle(ctx)
-            states[spec.id] = .failed("Connexion impossible : \(ctx.link.message(for: error))")
+            states[spec.id] = .failed(String(localized: "Connexion impossible : \(ctx.link.message(for: error))"))
             return state(of: spec.id)
         }
         startWatchdog()

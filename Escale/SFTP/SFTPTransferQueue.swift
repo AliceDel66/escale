@@ -180,7 +180,7 @@ final class SFTPTransferQueue {
     /// Reprise vérifiée du cœur dès la deuxième tentative (« Réessayer », reprise après coupure) ; première tentative
     /// toujours complète, pour ne jamais « reprendre » un fichier distant qu'on a choisi de remplacer.
     private func perform(_ t: SFTPTransfer) async throws {
-        guard let client = t.session.client else { throw SFTPError.channelClosed("canal SFTP non ouvert") }
+        guard let client = t.session.client else { throw SFTPError.channelClosed(String(localized: "canal SFTP non ouvert")) }
         if t.direction == .relay { try await relay(t, to: client); return }
         let resume = t.attempts > 1
         let task: SFTPTransferTask = switch t.direction {
@@ -200,7 +200,7 @@ final class SFTPTransferQueue {
     /// Lecture SFTP/shell de l'hôte A puis écriture vers l'hôte B, bloc par bloc. Une nouvelle tentative repart de zéro
     /// (le fichier de destination est tronqué) ; l'annulation est testée à chaque bloc.
     private func relay(_ t: SFTPTransfer, to dest: any RemoteFileSystem) async throws {
-        guard let src = t.source?.client, let from = t.sourcePath else { throw SFTPError.channelClosed("canal SFTP source non ouvert") }
+        guard let src = t.source?.client, let from = t.sourcePath else { throw SFTPError.channelClosed(String(localized: "canal SFTP source non ouvert")) }
         let total = try await src.attributes(of: from).size ?? 0
         t.relayProgress(bytes: 0, total: total)
         var offset: UInt64 = 0

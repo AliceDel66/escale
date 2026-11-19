@@ -92,7 +92,7 @@ final class SFTPEditManager {
             opener(e.localURL)
             return e
         }
-        guard let client = session.client else { throw SFTPError.channelClosed("canal SFTP non ouvert") }
+        guard let client = session.client else { throw SFTPError.channelClosed(String(localized: "canal SFTP non ouvert")) }
         let dir = root.appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         let local = dir.appendingPathComponent(item.name)
@@ -187,7 +187,7 @@ final class SFTPEditManager {
         e.state = .uploading
         defer { if e.state == .uploading { e.state = .watching } }
         do {
-            guard let client = e.session.client else { throw SFTPError.channelClosed("canal SFTP non ouvert") }
+            guard let client = e.session.client else { throw SFTPError.channelClosed(String(localized: "canal SFTP non ouvert")) }
             if !force, let remote = try? await client.attributes(of: e.remote),
                remote.modificationTime != e.baseModified || remote.size != e.baseSize {
                 if await resolveConflict(e) == .keepRemote {

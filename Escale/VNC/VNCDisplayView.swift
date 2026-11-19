@@ -35,7 +35,7 @@ final class VNCDisplayView: NSView {
         super.init(frame: frame)
         wantsLayer = true
         layer?.backgroundColor = NSColor.black.cgColor
-        setAccessibilityLabel("Bureau distant")
+        setAccessibilityLabel(String(localized: "Bureau distant"))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) non pris en charge") }
 

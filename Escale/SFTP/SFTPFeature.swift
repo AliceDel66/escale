@@ -37,7 +37,7 @@ final class SFTPFeature: AppFeature {
         alert.messageText = names.count == 1 ? String(localized: "« \(names[0]) » existe déjà sur le serveur") : String(localized: "\(names.count) éléments existent déjà sur le serveur")
         alert.informativeText = String(localized: "Voulez-vous les remplacer ?")
         alert.addButton(withTitle: String(localized: "Remplacer"))
-        alert.addButton(withTitle: "Annuler")
+        alert.addButton(withTitle: String(localized: "Annuler"))
         alert.alertStyle = .warning
         return alert.runModal() == .alertFirstButtonReturn
     }

@@ -307,6 +307,6 @@ private struct RecentRow: View {
             if host.connectionProtocol.isTerminal { Button("Nouvel onglet") { model.newTab(host) } }
             Button("Modifier…") { model.editor = .editHost(host) }
         }
-        .accessibilityLabel("\(host.name), \(host.connectionProtocol.displayName)")
+        .accessibilityLabel("\(host.name), \(host.connectionProtocol.localizedDisplayName)")
     }
 }

@@ -118,7 +118,7 @@ struct SerialEditorSection: View {
     private var portChoices: [DetectedSerialPort] {
         let p = settings.devicePath
         guard !p.isEmpty, !detected.contains(where: { $0.path == p }) else { return detected }
-        return detected + [DetectedSerialPort(path: p, name: "\((p as NSString).lastPathComponent) (absent)")]
+        return detected + [DetectedSerialPort(path: p, name: String(localized: "\((p as NSString).lastPathComponent) (absent)"))]
     }
 
     private var portSelection: Binding<String> {

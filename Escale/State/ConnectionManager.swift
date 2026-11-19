@@ -228,7 +228,7 @@ final class SSHLink {
         return false
     }
 
-    static let authRequiredMessage = "Authentification requise"
+    static var authRequiredMessage: String { String(localized: "Authentification requise") }
 
     // MARK: Rattachement des onglets
 

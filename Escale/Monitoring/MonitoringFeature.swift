@@ -126,13 +126,13 @@ final class MonitoringFeature: AppFeature {
     private func run(_ m: Monitor, pane: Pane) async {
         var failures = 0
         while !Task.isCancelled {
-            guard let link = pane.link else { m.phase = .failed("connexion absente"); break }
+            guard let link = pane.link else { m.phase = .failed(String(localized: "connexion absente")); break }
             if case .reconnecting = link.state {
                 m.phase = .waiting
-                if !(await link.waitReconnect()) { m.phase = .failed("connexion perdue"); break }
+                if !(await link.waitReconnect()) { m.phase = .failed(String(localized: "connexion perdue")); break }
                 continue
             }
-            guard link.state == .connected else { m.phase = .failed("connexion indisponible"); break }
+            guard link.state == .connected else { m.phase = .failed(String(localized: "connexion indisponible")); break }
             let stream: RemoteExecStream
             do {
                 stream = try await link.transport.openShellStream(MonitoringScript.remoteCommand())
@@ -140,7 +140,7 @@ final class MonitoringFeature: AppFeature {
                 m.phase = .busy; break
             } catch SSHTransportError.notConnected {
                 failures += 1
-                if failures >= 3 { m.phase = .failed("connexion indisponible"); break }
+                if failures >= 3 { m.phase = .failed(String(localized: "connexion indisponible")); break }
                 m.phase = .waiting
                 try? await Task.sleep(for: .seconds(2))
                 continue

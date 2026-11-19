@@ -1,6 +1,7 @@
 import AppKit
 import Foundation
 import Observation
+import SwiftUI
 import EscaleCore
 
 /// Demande d'ouverture d'une feuille d'édition.
@@ -32,6 +33,14 @@ enum SidebarTab: String, CaseIterable, Identifiable {
     case sessions, files, tools, macros
     var id: String { rawValue }
     var title: String {
+        switch self {
+        case .sessions: String(localized: "Sessions")
+        case .files: String(localized: "Fichiers")
+        case .tools: String(localized: "Outils")
+        case .macros: String(localized: "Macros")
+        }
+    }
+    var titleKey: LocalizedStringKey {
         switch self {
         case .sessions: "Sessions"
         case .files: "Fichiers"
@@ -229,7 +238,7 @@ final class AppModel {
 
     @discardableResult
     func openLocalTab(command: [String]? = nil) -> TerminalTab {
-        let title = command.map { ($0[0] as NSString).lastPathComponent } ?? "Terminal local"
+        let title = command.map { ($0[0] as NSString).lastPathComponent } ?? String(localized: "Terminal local")
         let tab = TerminalTab(kind: .local(command: command), baseTitle: title)
         workspace.add(tab)
         start(tab)
@@ -456,14 +465,14 @@ final class AppModel {
             }
             tab.status = .running
         } catch {
-            tab.status = .failed("lancement de \(exe) impossible : \(error)")
+            tab.status = .failed(String(localized: "lancement de \(exe) impossible : \(error.localizedDescription)"))
         }
     }
 
     /// Telnet, série : source d'octets ouverte par le module du protocole ; pas de maître ssh ni de reconnexion.
     private func launchStream(_ tab: Pane, profile: HostProfile) async {
         guard let launcher = terminalLaunchers[profile.connectionProtocol] else {
-            tab.status = .failed("Protocole \(profile.connectionProtocol.displayName) non pris en charge.")
+            tab.status = .failed(String(localized: "Protocole \(profile.connectionProtocol.localizedDisplayName) non pris en charge."))
             return
         }
         do {
@@ -498,7 +507,7 @@ final class AppModel {
                                        columns: s.columns, rows: s.rows, lease: cmd.lease)
                 } catch {
                     // Le bail est déjà rendu par PTYProcess (échec de lancement).
-                    tab.status = .failed("lancement de ssh impossible : \(error)")
+                    tab.status = .failed(String(localized: "lancement de ssh impossible : \(error.localizedDescription)"))
                     return
                 }
                 tab.launchEpoch = link.epoch
@@ -536,9 +545,9 @@ final class AppModel {
         let ok = await link.waitReconnect()
         if tab.isClosing || isShuttingDown { return }
         // « Authentification requise », secret refusé, annulation, clé d'hôte modifiée : message du lien, bouton « Réessayer ».
-        guard ok else { tab.status = .failed(link.lastError ?? "reconnexion abandonnée"); return }
+        guard ok else { tab.status = .failed(link.lastError ?? String(localized: "reconnexion abandonnée")); return }
         let stamp = Date.now.formatted(.iso8601.year().month().day().dateSeparator(.dash).time(includingFractionalSeconds: false).timeSeparator(.colon).dateTimeSeparator(.space))
-        tab.session.appendSeparator("Connexion rétablie le \(stamp)")
+        tab.session.appendSeparator(String(localized: "Connexion rétablie le \(stamp)"))
         await launchRemote(tab, link: link)
     }
 

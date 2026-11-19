@@ -69,7 +69,7 @@ enum SFTPPath {
 /// Colonne de tri du navigateur.
 enum SFTPSortKey: String, CaseIterable, Sendable {
     case name, size, date
-    var label: String { switch self { case .name: "Nom"; case .size: String(localized: "Taille"); case .date: String(localized: "Date") } }
+    var label: String { switch self { case .name: String(localized: "Nom"); case .size: String(localized: "Taille"); case .date: String(localized: "Date") } }
 }
 
 /// Tri de la liste : dossiers d'abord, puis la colonne choisie (le nom départage les égalités).
@@ -131,7 +131,7 @@ enum SFTPMessages {
                 case .permissionDenied: return String(localized: "Permission refusée par le serveur.")
                 case .opUnsupported: return String(localized: "Opération non supportée par le serveur.")
                 case .failure: return message.isEmpty ? String(localized: "Le serveur a refusé l'opération.") : message
-                default: return message.isEmpty ? "Erreur SFTP (\(code))." : message
+                default: return message.isEmpty ? String(localized: "Erreur SFTP (\(String(describing: code))).") : message
                 }
             case .protocolViolation(let m): return String(localized: "Réponse SFTP inattendue : \(m)")
             case .channelClosed: return String(localized: "Canal SFTP fermé (connexion perdue).")

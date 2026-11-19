@@ -103,13 +103,13 @@ private struct TerminalColorsMenuItems: View {
         Divider()
         Menu("Thème du terminal") {
             Picker("Thème du terminal", selection: Binding(get: { feature.themeID }, set: { feature.setTheme($0) })) {
-                ForEach(TerminalTheme.all) { Text($0.name).tag($0.id) }
+                ForEach(TerminalTheme.all) { Text($0.localizedNameKey).tag($0.id) }
             }
             .pickerStyle(.inline).labelsHidden()
         }
         Menu("Coloration de la sortie") {
             Picker("Coloration de la sortie", selection: Binding(get: { feature.rules }, set: { feature.setRules($0) })) {
-                ForEach(HighlightRuleSet.allCases) { Text($0.title).tag($0) }
+                ForEach(HighlightRuleSet.allCases) { Text($0.localizedTitleKey).tag($0) }
             }
             .pickerStyle(.inline).labelsHidden()
         }
@@ -128,9 +128,9 @@ struct TerminalColorsHostMenuItems: View {
     var body: some View {
         Menu("Coloration de la sortie") {
             Picker("Coloration de la sortie", selection: selection) {
-                Text("Réglage général (\(feature.rules.title))").tag("")
+                Text("Réglage général (\(feature.rules.localizedTitle))").tag("")
                 Divider()
-                ForEach(HighlightRuleSet.allCases) { Text($0.title).tag($0.rawValue) }
+                ForEach(HighlightRuleSet.allCases) { Text($0.localizedTitleKey).tag($0.rawValue) }
             }
             .pickerStyle(.inline).labelsHidden()
         }

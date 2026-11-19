@@ -66,7 +66,7 @@ struct MonitoringBar: View {
                  value: "↓ \(MonitoringFormat.rate(s.netInRate))  ↑ \(MonitoringFormat.rate(s.netOutRate))",
                  help: String(localized: "Débit réseau entrant et sortant (interfaces physiques)")),
             Item(id: "users", symbol: "person.2", label: String(localized: "Util."), value: s.users.map(String.init) ?? "—", help: String(localized: "Utilisateurs connectés")),
-            Item(id: "up", symbol: "clock", label: "Actif", value: MonitoringFormat.uptime(s.uptime), help: String(localized: "Durée depuis le démarrage du serveur")),
+            Item(id: "up", symbol: "clock", label: String(localized: "Actif"), value: MonitoringFormat.uptime(s.uptime), help: String(localized: "Durée depuis le démarrage du serveur")),
         ]
     }
 
@@ -101,13 +101,13 @@ struct MonitoringBar: View {
     @ViewBuilder private var content: some View {
         switch monitor.phase {
         case .running:
-            if let s = monitor.snapshot { metrics(s) } else { message("Monitoring distant…", spinner: true) }
-        case .starting: message("Monitoring distant…", spinner: true)
+            if let s = monitor.snapshot { metrics(s) } else { message(String(localized: "Monitoring distant…"), spinner: true) }
+        case .starting: message(String(localized: "Monitoring distant…"), spinner: true)
         case .waiting:
             if let s = monitor.snapshot { metrics(s).opacity(0.45) } else { message(String(localized: "Monitoring en pause (connexion perdue)"), spinner: false) }
         case .unsupported: message(String(localized: "Monitoring indisponible sur ce système"), spinner: false)
         case .busy: message(String(localized: "Monitoring indisponible : sessions du serveur épuisées"), spinner: false)
-        case .failed(let m): message("Monitoring indisponible : \(m)", spinner: false)
+        case .failed(let m): message(String(localized: "Monitoring indisponible : \(m)"), spinner: false)
         }
     }
 

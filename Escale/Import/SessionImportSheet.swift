@@ -83,7 +83,7 @@ struct SessionImportSheet: View {
             VStack(alignment: .leading, spacing: 2) {
                 HStack {
                     Image(systemName: s.connectionProtocol.symbolName).foregroundStyle(.secondary)
-                        .help(s.connectionProtocol.displayName).accessibilityLabel(s.connectionProtocol.displayName)
+                        .help(s.connectionProtocol.localizedDisplayNameKey).accessibilityLabel(s.connectionProtocol.localizedDisplayNameKey)
                     Text(s.name).fontWeight(.medium)
                     if !importable {
                         Text("déjà présent").font(.caption2).padding(.horizontal, 5).padding(.vertical, 1)
@@ -100,14 +100,16 @@ struct SessionImportSheet: View {
 
     private func detail(_ s: ImportedSession) -> String {
         var parts = [(s.user.map { "\($0)@" } ?? "") + s.host + (s.port.map { ":\($0)" } ?? "")]
-        if s.connectionProtocol != .ssh { parts.insert(s.connectionProtocol.displayName, at: 0) }
+        if s.connectionProtocol != .ssh { parts.insert(s.connectionProtocol.localizedDisplayName, at: 0) }
         if let serial = s.serial {
             parts[parts.count - 1] = serial.devicePath.isEmpty ? String(localized: "port à choisir") : serial.devicePath
-            parts.append("\(serial.baudRate) bauds")
+            parts.append(String(localized: "\(serial.baudRate) bauds"))
         }
-        if !s.folderPath.isEmpty { parts.append("Dossier : " + s.folderPath.joined(separator: " / ")) }
-        if !s.jumpHosts.isEmpty { parts.append("Bastion : " + s.jumpHosts.joined(separator: ", ")) }
-        if !s.tunnels.isEmpty { parts.append("\(s.tunnels.count) tunnel\(s.tunnels.count > 1 ? "s" : "")") }
+        if !s.folderPath.isEmpty { parts.append(String(localized: "Dossier : \(s.folderPath.joined(separator: " / "))")) }
+        if !s.jumpHosts.isEmpty { parts.append(String(localized: "Bastion : \(s.jumpHosts.joined(separator: ", "))")) }
+        if !s.tunnels.isEmpty {
+            parts.append(s.tunnels.count == 1 ? String(localized: "1 tunnel") : String(localized: "\(s.tunnels.count) tunnels"))
+        }
         if s.x11Forwarding { parts.append("X11") }
         if !s.tags.isEmpty { parts.append(s.tags.map { "#\($0)" }.joined(separator: " ")) }
         return parts.joined(separator: "  ·  ")

@@ -34,7 +34,7 @@ private struct SidebarTabBar: View {
                     VStack(spacing: 2) {
                         Image(systemName: tab.symbolName).symbolVariant(active ? .fill : .none)
                             .font(.system(size: 14)).frame(height: 16)
-                        Text(LocalizedStringKey(tab.title)).font(.system(size: 10, weight: active ? .semibold : .regular)).lineLimit(1)
+                        Text(tab.titleKey).font(.system(size: 10, weight: active ? .semibold : .regular)).lineLimit(1)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 5)
@@ -43,8 +43,8 @@ private struct SidebarTabBar: View {
                     .contentShape(RoundedRectangle(cornerRadius: 6))
                 }
                 .buttonStyle(.plain)
-                .help(LocalizedStringKey(tab.title))
-                .accessibilityLabel(LocalizedStringKey(tab.title))
+                .help(tab.titleKey)
+                .accessibilityLabel(tab.titleKey)
                 .accessibilityAddTraits(active ? [.isSelected] : [])
                 .accessibilityIdentifier("sidebar.tab.\(tab.rawValue)")
             }
@@ -261,7 +261,7 @@ private struct HostRow: View {
         HStack(spacing: 6) {
             Image(systemName: host.connectionProtocol.symbolName).foregroundStyle(host.connectionProtocol.tint)
                 .frame(width: 18)
-                .help(host.connectionProtocol.displayName)
+                .help(host.connectionProtocol.localizedDisplayNameKey)
             VStack(alignment: .leading, spacing: 1) {
                 // Une seule ligne (densité d'une liste de sessions) : nom, puis cible en retrait.
                 HStack(spacing: 6) {
@@ -307,7 +307,7 @@ struct ConnectionDot: View {
         case .connected: String(localized: "connecté")
         case .failed(let m): String(localized: "échec : \(m)")
         case .reconnecting: String(localized: "reconnexion en cours")
-        case .authRequired: "authentification requise"
+        case .authRequired: String(localized: "authentification requise")
         case .cancelled: String(localized: "authentification annulée")
         case .hostKeyChanged: String(localized: "clé d'hôte modifiée : connexion refusée")
         }

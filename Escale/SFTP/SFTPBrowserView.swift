@@ -84,7 +84,7 @@ private struct SFTPSessionView: View {
                     .textSelection(.enabled)
             }
             if session.isShellMode, session.isReady {
-                StatusBanner(tone: .info, icon: .symbol("terminal"), title: "Mode shell (SFTP indisponible)",
+                StatusBanner(tone: .info, icon: .symbol("terminal"), title: String(localized: "Mode shell (SFTP indisponible)"),
                              detail: session.shellReason.flatMap { $0.isEmpty ? nil : $0 },
                              layout: .compact, titleLines: 1, detailLines: 2)
             }
@@ -124,7 +124,7 @@ private struct SFTPSessionView: View {
     }
 
     private var deleteTitle: String {
-        deleting.count == 1 ? "Supprimer « \(deleting[0].name) » ?" : String(localized: "Supprimer \(deleting.count) éléments ?")
+        deleting.count == 1 ? String(localized: "Supprimer « \(deleting[0].name) » ?") : String(localized: "Supprimer \(deleting.count) éléments ?")
     }
 
     // MARK: En-tête

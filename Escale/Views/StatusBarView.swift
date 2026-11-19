@@ -37,7 +37,7 @@ struct StatusBarView: View {
             Label("Terminal local", systemImage: "terminal").labelStyle(.titleAndIcon)
         case .host(let h):
             Label {
-                Text(h.connectionProtocol == .serial ? h.name : "\(h.connectionProtocol.displayName) · \(h.target)\(h.port.map { ":\($0)" } ?? "")")
+                Text(h.connectionProtocol == .serial ? h.name : "\(h.connectionProtocol.localizedDisplayName) · \(h.target)\(h.port.map { ":\($0)" } ?? "")")
             } icon: {
                 Image(systemName: h.connectionProtocol.symbolName).foregroundStyle(h.connectionProtocol.tint)
             }

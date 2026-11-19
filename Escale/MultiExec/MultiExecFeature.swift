@@ -282,8 +282,8 @@ final class MultiExecFeature: AppFeature {
     }
 
     func beginGroupExec(folder id: UUID) {
-        let name = model?.library.folderPath(id) ?? "dossier"
-        beginGroupExec(hosts: hosts(inFolder: id), source: "Dossier « \(name) »")
+        let name = model?.library.folderPath(id) ?? String(localized: "dossier")
+        beginGroupExec(hosts: hosts(inFolder: id), source: String(localized: "Dossier « \(name) »"))
     }
     func beginGroupExec(tag: String) { beginGroupExec(hosts: hosts(withTag: tag), source: String(localized: "Étiquette #\(tag)")) }
     func beginGroupExecOnConnected() { beginGroupExec(hosts: connectedHosts, source: String(localized: "Hôtes connectés")) }

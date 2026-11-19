@@ -187,7 +187,7 @@ final class LibraryStore {
     func duplicateHost(_ id: UUID) -> HostProfile? {
         guard var copy = host(id) else { return nil }
         copy.id = UUID()
-        copy.name += " (copie)"
+        copy.name += String(localized: " (copie)")
         // Une copie ne partage pas le secret Trousseau de l'original (compte dérivé de l'identifiant).
         if case .keychainPassword = copy.auth { copy.auth = .keychainPassword(account: AuthKeychain.passwordAccount(for: copy.id)) }
         return apply({ try $0.addHost(copy) }) ? copy : nil

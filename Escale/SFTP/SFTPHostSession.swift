@@ -328,7 +328,7 @@ final class SFTPHostSession: Identifiable {
 
     private func valid(_ name: String) -> Bool {
         if name.isEmpty || name.contains("/") || name == "." || name == ".." {
-            errorMessage = "Nom invalide."
+            errorMessage = String(localized: "Nom invalide.")
             return false
         }
         return true
@@ -339,7 +339,7 @@ final class SFTPHostSession: Identifiable {
     /// Envoie des fichiers/dossiers locaux dans `directory` (dossier courant par défaut).
     @discardableResult
     func upload(_ urls: [URL], into directory: Data? = nil, policy: SFTPOverwritePolicy = .ask) async -> [SFTPTransfer] {
-        guard let client else { errorMessage = "Canal SFTP non ouvert."; return [] }
+        guard let client else { errorMessage = String(localized: "Canal SFTP non ouvert."); return [] }
         let dir = directory ?? path
         if policy == .ask {
             var existing: [String] = []
@@ -357,7 +357,7 @@ final class SFTPHostSession: Identifiable {
     private func expandUpload(_ local: URL, to remote: Data, client: any RemoteFileSystem) async throws -> [SFTPTransfer] {
         var isDir: ObjCBool = false
         guard FileManager.default.fileExists(atPath: local.path, isDirectory: &isDir) else {
-            throw SFTPError.localIO("fichier introuvable : \(local.lastPathComponent)")
+            throw SFTPError.localIO(String(localized: "fichier introuvable : \(local.lastPathComponent)"))
         }
         if !isDir.boolValue {
             return [SFTPTransfer(direction: .upload, name: local.lastPathComponent, local: local, remote: remote, session: self)]
@@ -376,7 +376,7 @@ final class SFTPHostSession: Identifiable {
     /// Télécharge dans `directory` (dossiers récursivement). Noms en collision : suffixe « 2 », « 3 »…
     @discardableResult
     func download(_ list: [SFTPItem], to directory: URL) async -> [SFTPTransfer] {
-        guard let client else { errorMessage = "Canal SFTP non ouvert."; return [] }
+        guard let client else { errorMessage = String(localized: "Canal SFTP non ouvert."); return [] }
         var made: [SFTPTransfer] = []
         do {
             for it in list {
@@ -437,7 +437,7 @@ final class SFTPHostSession: Identifiable {
 
     /// Télécharge un fichier dans un dossier temporaire (glisser vers le Finder) et rend son URL.
     func exportForDrag(_ item: SFTPItem) async throws -> URL {
-        guard let client else { throw SFTPError.channelClosed("canal SFTP non ouvert") }
+        guard let client else { throw SFTPError.channelClosed(String(localized: "canal SFTP non ouvert")) }
         let dir = feature.cachesRoot.appendingPathComponent("drag/\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         let dest = dir.appendingPathComponent(item.name)
@@ -453,7 +453,7 @@ final class SFTPHostSession: Identifiable {
     @discardableResult
     func copy(_ list: [SFTPItem], from origin: SFTPHostSession, into directory: Data) async -> [SFTPTransfer] {
         guard origin !== self else { return [] }
-        guard let client, let originClient = origin.client else { errorMessage = "Canal SFTP non ouvert."; return [] }
+        guard let client, let originClient = origin.client else { errorMessage = String(localized: "Canal SFTP non ouvert."); return [] }
         var made: [SFTPTransfer] = []
         var problems: [String] = []
         for it in list {
@@ -498,7 +498,7 @@ final class SFTPHostSession: Identifiable {
     /// destination n'est jamais écrasé (erreur affichée, les autres éléments sont traités). Renvoie le nombre traité.
     @discardableResult
     func move(_ list: [SFTPItem], into directory: Data, copy: Bool) async -> Int {
-        guard let client else { errorMessage = "Canal SFTP non ouvert."; return 0 }
+        guard let client else { errorMessage = String(localized: "Canal SFTP non ouvert."); return 0 }
         var done = 0
         var problems: [String] = []
         for it in list {

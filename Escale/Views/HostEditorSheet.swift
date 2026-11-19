@@ -23,7 +23,7 @@ enum HostFormValidation {
         let t = s.trimmingCharacters(in: .whitespaces)
         if t.isEmpty { return nil }
         if isSuspicious(t) { return String(localized: "L'utilisateur ne peut pas commencer par « - ».") }
-        if t.contains(where: \.isWhitespace) || t.contains("@") { return "Utilisateur invalide." }
+        if t.contains(where: \.isWhitespace) || t.contains("@") { return String(localized: "Utilisateur invalide.") }
         return nil
     }
     static func keyPath(_ s: String) -> String? {
@@ -256,7 +256,7 @@ struct HostEditorSheet: View {
         let store = model.connections.secretStore, account = account
         Task {
             do { try await store.removeSecret(for: account); hasStoredSecret = false; secretMessage = String(localized: "Mot de passe oublié.") }
-            catch { secretMessage = "Suppression impossible : \(error)" }
+            catch { secretMessage = String(localized: "Suppression impossible : \(error.localizedDescription)") }
         }
     }
 
@@ -273,7 +273,7 @@ struct HostEditorSheet: View {
                 hasStoredPassphrase = false
                 passphraseMessage = String(localized: "Phrase de passe oubliée.")
             } catch {
-                passphraseMessage = "Suppression impossible : \(error)"
+                passphraseMessage = String(localized: "Suppression impossible : \(error.localizedDescription)")
             }
         }
     }
