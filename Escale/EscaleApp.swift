@@ -11,6 +11,8 @@ enum Launcher {
         AskpassClient.runIfRequested()
         // `Escale --mcp` : relais stdio du client MCP vers l'app en service (voir `MCPRelay`), sans AppKit.
         MCPRelay.runIfRequested()
+        // Langue utilisateur (`escale.language`) appliquée avant la mise en cache de `Bundle.main.preferredLocalizations`.
+        AppLanguage.applyLaunchLanguage()
         EscaleApp.main()
     }
 }
@@ -28,6 +30,7 @@ struct EscaleApp: App {
     var body: some Scene {
         Window("Escale", id: "main") {
             MainWindowView(model: model)
+                .environment(\.locale, model.settings.effectiveLocale)
                 .frame(minWidth: 760, minHeight: 440)
                 .task { await model.start() }
         }
@@ -55,6 +58,8 @@ struct EscaleCommands: Commands {
         }
         CommandGroup(replacing: .saveItem) {
             Button("Fermer l'onglet") {
+                // Fenêtre Réglages active : ⌘W la ferme sans toucher aux onglets de terminaux.
+                if model.settings.closeIfKeyWindow() { return }
                 // Dernier onglet fermé : Cmd-W ferme alors la fenêtre.
                 // Fenêtre détachée active : ⌘W ferme son panneau actif, puis son onglet et la fenêtre.
                 if model.detached.closeActivePaneInKeyWindow() { return }

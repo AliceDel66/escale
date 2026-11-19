@@ -90,6 +90,10 @@ struct MainToolbar: CustomizableToolbarContent {
             }
             .help("Accès des agents IA — agy, Claude, Codex (MCP)")
         }
+        ToolbarItem(id: "reglages", placement: .automatic) {
+            Button { model.settings.show() } label: { Label("Réglages", systemImage: "gearshape") }
+                .help("Réglages (⌘,)")
+        }
         ToolbarItem(id: "importer", placement: .automatic, showsByDefault: false) {
             Menu {
                 Button("Depuis ~/.ssh/config…") { model.beginImport() }

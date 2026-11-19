@@ -114,6 +114,22 @@ extension ToolbarContentBuilder {
     ) -> some CustomizableToolbarContent {
         buildBlock(buildBlock(c0, c1, c2, c3, c4, c5, c6, c7, c8, c9), buildBlock(c10, c11))
     }
+
+    static func buildBlock<
+        C0: CustomizableToolbarContent, C1: CustomizableToolbarContent,
+        C2: CustomizableToolbarContent, C3: CustomizableToolbarContent,
+        C4: CustomizableToolbarContent, C5: CustomizableToolbarContent,
+        C6: CustomizableToolbarContent, C7: CustomizableToolbarContent,
+        C8: CustomizableToolbarContent, C9: CustomizableToolbarContent,
+        C10: CustomizableToolbarContent, C11: CustomizableToolbarContent,
+        C12: CustomizableToolbarContent
+    >(
+        _ c0: C0, _ c1: C1, _ c2: C2, _ c3: C3, _ c4: C4,
+        _ c5: C5, _ c6: C6, _ c7: C7, _ c8: C8, _ c9: C9,
+        _ c10: C10, _ c11: C11, _ c12: C12
+    ) -> some CustomizableToolbarContent {
+        buildBlock(buildBlock(c0, c1, c2, c3, c4, c5, c6, c7, c8, c9), buildBlock(c10, c11, c12))
+    }
 }
 SWIFT
 
@@ -163,7 +179,7 @@ SPK_SRC="$(find "$WORK/.build/artifacts" -name "Sparkle.framework" -path "*macos
 step "Assemblage de $APP (version $VERSION, build $BUILD)"
 rm -rf "$APP"
 C="$APP/Contents"
-mkdir -p "$C/MacOS" "$C/Frameworks" "$C/Helpers" "$C/Resources/en.lproj" "$C/Resources/fr.lproj"
+mkdir -p "$C/MacOS" "$C/Frameworks" "$C/Helpers" "$C/Resources/en.lproj" "$C/Resources/fr.lproj" "$C/Resources/zh-Hans.lproj"
 
 cp "$BIN" "$C/MacOS/Escale"
 chmod 755 "$C/MacOS/Escale"
@@ -182,16 +198,18 @@ python3 - "$ROOT/Escale/Resources/Localizable.xcstrings" "$C/Resources" <<'PY'
 import json, os, plistlib, sys
 src, res_dir = sys.argv[1], sys.argv[2]
 data = json.load(open(src, encoding="utf-8"))
-fr_map, en_map = {}, {}
+fr_map, en_map, zh_map = {}, {}, {}
 for k, v in data.get("strings", {}).items():
     locs = v.get("localizations", {})
     fr_map[k] = locs.get("fr", {}).get("stringUnit", {}).get("value", k)
-    en_map[k] = locs.get("en", {}).get("stringUnit", {}).get("value", k)
-for lang, mapping in [("fr", fr_map), ("en", en_map)]:
+    en_val = locs.get("en", {}).get("stringUnit", {}).get("value", k)
+    en_map[k] = en_val
+    zh_map[k] = locs.get("zh-Hans", {}).get("stringUnit", {}).get("value", en_val)
+for lang, mapping in [("fr", fr_map), ("en", en_map), ("zh-Hans", zh_map)]:
     p = os.path.join(res_dir, f"{lang}.lproj", "Localizable.strings")
     with open(p, "wb") as f:
         plistlib.dump(mapping, f, fmt=plistlib.FMT_BINARY)
-print(f"Localizable.strings: {len(fr_map)} fr + {len(en_map)} en")
+print(f"Localizable.strings: {len(fr_map)} fr + {len(en_map)} en + {len(zh_map)} zh-Hans")
 PY
 
 python3 - "$ROOT/Escale/Info.plist" "$C/Info.plist" "$VERSION" "$BUILD" <<'PY'
@@ -211,6 +229,7 @@ subs = {
 for k, v in list(pl.items()):
     if isinstance(v, str) and v in subs:
         pl[k] = subs[v]
+pl["CFBundleLocalizations"] = ["fr", "en", "zh-Hans"]
 pl["CFBundleIconFile"] = "AppIcon"
 pl["CFBundleIconName"] = "AppIcon"
 pl["CFBundleSupportedPlatforms"] = ["MacOSX"]

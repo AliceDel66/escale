@@ -27,6 +27,7 @@ struct FeatureCommands: Commands {
         MonitoringCommands(model: model)
         TerminalColorsCommands(model: model)
         MCPCommands(model: model)
+        SettingsCommands(model: model)
     }
 }
 

@@ -15,6 +15,7 @@ struct VNCWindowView: View {
             }
         }
         .frame(minWidth: 480, minHeight: 320)
+        .environment(\.locale, session.model.settings.effectiveLocale)
     }
 }
 
@@ -33,7 +34,7 @@ struct VNCToolbar: View {
             HStack(spacing: 4) {
                 Text("Échelle").fixedSize()
                 Picker("Échelle", selection: $session.scaling) {
-                    ForEach(VNCScaling.allCases, id: \.self) { Text($0.displayName).tag($0) }
+                    ForEach(VNCScaling.allCases, id: \.self) { Text($0.localizedDisplayNameKey).tag($0) }
                 }
                 .pickerStyle(.menu).labelsHidden().fixedSize()
             }

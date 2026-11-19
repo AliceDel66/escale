@@ -132,10 +132,10 @@ struct VNCEditorSection: View {
                     .font(.caption).foregroundStyle(.secondary)
             }
             Picker("Encodage", selection: $settings.encoding) {
-                ForEach(VNCEncodingPreference.allCases, id: \.self) { Text($0.displayName).tag($0) }
+                ForEach(VNCEncodingPreference.allCases, id: \.self) { Text($0.localizedDisplayNameKey).tag($0) }
             }
             Picker("Échelle", selection: $settings.scaling) {
-                ForEach(VNCScaling.allCases, id: \.self) { Text($0.displayName).tag($0) }
+                ForEach(VNCScaling.allCases, id: \.self) { Text($0.localizedDisplayNameKey).tag($0) }
             }
             Toggle("Lecture seule", isOn: $settings.viewOnly)
             Toggle("Session partagée (ne pas déconnecter les autres clients)", isOn: $settings.shared)

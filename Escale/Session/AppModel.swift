@@ -103,7 +103,8 @@ final class AppModel {
     let monitoring = MonitoringFeature()
     let colors = TerminalColorsFeature()
     let mcp = MCPFeature()
-    var features: [any AppFeature] { [sftp, tunnels, multiExec, macros, imports, updates, monitoring, colors, serial, telnet, vnc, rdp, mcp] }
+    let settings = SettingsFeature()
+    var features: [any AppFeature] { [sftp, tunnels, multiExec, macros, imports, updates, monitoring, colors, serial, telnet, vnc, rdp, mcp, settings] }
 
     // Modules de protocoles (V1.2/V2), même contrat `AppFeature`.
     let serial = SerialFeature()
@@ -439,7 +440,7 @@ final class AppModel {
     private var showsLocalBanner: Bool {
         if let v = options.value("local-banner") { return v == "on" }
         if options.isSelfTest { return false }
-        return UserDefaults.standard.object(forKey: "escale.localBanner") as? Bool ?? true
+        return settings.localBannerEnabled
     }
 
     private func launchLocal(_ tab: Pane, command: [String]?) {

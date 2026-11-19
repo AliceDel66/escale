@@ -94,6 +94,7 @@ struct MonitoringBar: View {
         .background(Color(white: 0.11))
         .overlay(alignment: .top) { Rectangle().fill(Color.white.opacity(0.12)).frame(height: 1) }
         .environment(\.colorScheme, .dark)
+        .environment(\.locale, feature.model?.settings.effectiveLocale ?? .current)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Monitoring distant de \(hostName)")
     }

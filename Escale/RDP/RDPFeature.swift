@@ -313,7 +313,7 @@ struct RDPEditorSection: View {
             Text("Escale ouvre cet hôte avec le client Bureau à distance de Microsoft (« Windows App »). L'identifiant et le mot de passe sont demandés par ce client ; Escale ne les enregistre pas.")
                 .font(.caption).foregroundStyle(.secondary)
             Picker("Affichage", selection: $settings.displayMode) {
-                ForEach(RDPSettings.DisplayMode.allCases, id: \.self) { Text($0.displayName).tag($0) }
+                ForEach(RDPSettings.DisplayMode.allCases, id: \.self) { Text($0.localizedDisplayNameKey).tag($0) }
             }
             if settings.displayMode == .fixedSize {
                 Stepper(value: $settings.width, in: RDPSettings.minDimension...RDPSettings.maxDimension, step: 40) {
@@ -326,7 +326,7 @@ struct RDPEditorSection: View {
             Toggle("Utiliser tous les écrans", isOn: $settings.multiMonitor)
             Toggle("Partager le presse-papiers", isOn: $settings.redirectClipboard)
             Picker("Son", selection: $settings.audio) {
-                ForEach(RDPSettings.AudioMode.allCases, id: \.self) { Text($0.displayName).tag($0) }
+                ForEach(RDPSettings.AudioMode.allCases, id: \.self) { Text($0.localizedDisplayNameKey).tag($0) }
             }
             Toggle("Laisser le client demander les identifiants", isOn: $settings.promptForCredentials)
             TextField("Passerelle Bureau à distance", text: $settings.gatewayHostname, prompt: Text("Aucune"))

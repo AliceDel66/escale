@@ -142,7 +142,7 @@ struct TelnetEditorSection: View {
                 .font(.caption).foregroundStyle(.secondary)
             TextField("Type de terminal", text: $settings.terminalType, prompt: Text(TelnetSettings.defaultTerminalType))
             Picker("Touche Entrée", selection: $settings.lineEnding) {
-                ForEach(TelnetSettings.LineEnding.allCases, id: \.self) { Text($0.displayName).tag($0) }
+                ForEach(TelnetSettings.LineEnding.allCases, id: \.self) { Text($0.localizedDisplayNameKey).tag($0) }
             }
             Stepper(value: $settings.connectTimeout, in: 1...120) {
                 Text("Délai de connexion : \(settings.connectTimeout) s")

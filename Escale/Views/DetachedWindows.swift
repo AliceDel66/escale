@@ -151,6 +151,7 @@ struct DetachedWindowView: View {
             Divider()
             PaneHost(model: model, tabs: tabs.map { PaneHostTab(snapshotOf: $0, model: model) }, activeID: tabs.first?.id)
         }
+        .environment(\.locale, model.settings.effectiveLocale)
     }
 }
 

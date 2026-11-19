@@ -68,3 +68,53 @@ extension HighlightRuleSet {
         }
     }
 }
+
+extension RDPSettings.DisplayMode {
+    var localizedDisplayNameKey: LocalizedStringKey {
+        switch self {
+        case .fullScreen: "Plein écran"
+        case .window: "Fenêtre (taille dynamique)"
+        case .fixedSize: "Taille fixe"
+        }
+    }
+}
+
+extension RDPSettings.AudioMode {
+    var localizedDisplayNameKey: LocalizedStringKey {
+        switch self {
+        case .local: "Sur ce Mac"
+        case .remote: "Sur l'ordinateur distant"
+        case .none: "Aucun"
+        }
+    }
+}
+
+extension TelnetSettings.LineEnding {
+    var localizedDisplayNameKey: LocalizedStringKey {
+        switch self {
+        case .standard: "Standard (CR NUL)"
+        case .crlf: "CR LF"
+        case .cr: "CR seul"
+        }
+    }
+}
+
+extension VNCEncodingPreference {
+    var localizedDisplayNameKey: LocalizedStringKey {
+        switch self {
+        case .auto: "Automatique"
+        case .zrle: "ZRLE"
+        case .hextile: "Hextile"
+        case .raw: "Brut (Raw)"
+        }
+    }
+}
+
+extension VNCScaling {
+    var localizedDisplayNameKey: LocalizedStringKey {
+        switch self {
+        case .fit: "Ajuster à la fenêtre"
+        case .actual: "100 %"
+        }
+    }
+}

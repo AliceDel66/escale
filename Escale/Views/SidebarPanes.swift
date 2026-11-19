@@ -46,6 +46,7 @@ struct ToolsPane: View {
                 }
             }
             Section("Application") {
+                ToolRow("Réglages…", symbol: "gearshape", detail: "⌘,") { model.settings.show() }
                 ToolRow("Gérer les macros…", symbol: "paperplane") { model.macros.managerOpen = true }
                 ToolRow("Rechercher les mises à jour…", symbol: "arrow.down.circle") { model.updates.checkForUpdates() }
                     .disabled(!model.updates.canCheckForUpdates)

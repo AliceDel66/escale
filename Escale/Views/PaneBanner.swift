@@ -23,6 +23,7 @@ struct PaneBanner: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)
         }
+        .environment(\.locale, model.settings.effectiveLocale)
     }
 
     /// Dernière erreur du lien pendant la reconnexion.
