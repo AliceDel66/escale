@@ -18,6 +18,23 @@
         }
       }
     },
+    " (copie)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (copy)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（副本）"
+          }
+        }
+      }
+    },
     " (modifiée)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -82,6 +99,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ (%lld 字节)"
+          }
+        }
+      }
+    },
+    "%@ (absent)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (not connected)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@（未连接）"
           }
         }
       }
@@ -528,6 +562,40 @@
         }
       }
     },
+    "30 s" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 s"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 秒"
+          }
+        }
+      }
+    },
+    "5 min" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 min"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 分钟"
+          }
+        }
+      }
+    },
     "Abandonner" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -800,6 +868,23 @@
         }
       }
     },
+    "Affiche les informations d'accueil à l'ouverture d'un nouveau terminal local." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows welcome information when opening a new local terminal."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开新的本地终端时显示欢迎信息。"
+          }
+        }
+      }
+    },
     "Affiche sur ce Mac les applications graphiques lancées sur l'hôte (xeyes, éditeurs…), sans rien installer." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1055,6 +1140,23 @@
         }
       }
     },
+    "Ajuster à la fenêtre" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fit to Window"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "适应窗口"
+          }
+        }
+      }
+    },
     "Annuler" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1106,6 +1208,23 @@
         }
       }
     },
+    "Aperçu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "预览"
+          }
+        }
+      }
+    },
     "Aperçu pour %@ : " : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1140,6 +1259,23 @@
         }
       }
     },
+    "Application X11" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X11 Application"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X11 应用"
+          }
+        }
+      }
+    },
     "Application X11…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1153,6 +1289,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "X11 应用…"
+          }
+        }
+      }
+    },
+    "Application indisponible." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Application unavailable."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用程序不可用。"
           }
         }
       }
@@ -1344,6 +1497,23 @@
         }
       }
     },
+    "Aucun fichier choisi" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No file selected"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未选择文件"
+          }
+        }
+      }
+    },
     "Aucun fichier de configuration SSH à « %@ »." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1442,6 +1612,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在此文件中未找到任何主机。"
+          }
+        }
+      }
+    },
+    "Aucun onglet ouvert." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No open tab."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有打开的标签页。"
           }
         }
       }
@@ -1752,6 +1939,23 @@
         }
       }
     },
+    "Automatique" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
+    },
     "Autorise un agent à connecter un hôte SSH exposé même sans onglet ouvert (avec confirmation sur les hôtes réglés en confirmation)." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1854,6 +2058,40 @@
         }
       }
     },
+    "Bannière d'accueil du terminal local" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local terminal welcome banner"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地终端欢迎横幅"
+          }
+        }
+      }
+    },
+    "Barre d'outils en icônes seules, barre latérale repliée et barre d'état réduite (⇧⌘M)." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Icon-only toolbar, collapsed sidebar, and slim status bar (⇧⌘M)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工具栏仅显示图标、折叠侧边栏并精简状态栏 (⇧⌘M)。"
+          }
+        }
+      }
+    },
     "Barre d'état" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1939,6 +2177,23 @@
         }
       }
     },
+    "Bastion : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jump host: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳板机：%@"
+          }
+        }
+      }
+    },
     "Bastions" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2007,6 +2262,57 @@
         }
       }
     },
+    "Brut (Raw)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raw"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "原始 (Raw)"
+          }
+        }
+      }
+    },
+    "Bureau : %@ — %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desktop: %@ — %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "桌面：%@ — %@"
+          }
+        }
+      }
+    },
+    "Bureau distant" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remote desktop"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "远程桌面"
+          }
+        }
+      }
+    },
     "Bureau à distance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2020,6 +2326,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "远程桌面"
+          }
+        }
+      }
+    },
+    "Bureau à distance (RDP)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remote Desktop (RDP)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "远程桌面 (RDP)"
           }
         }
       }
@@ -2041,6 +2364,23 @@
         }
       }
     },
+    "CR seul" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CR only"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅 CR"
+          }
+        }
+      }
+    },
     "Canal SFTP fermé (connexion perdue)." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2054,6 +2394,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "SFTP 通道已关闭（连接已断开）。"
+          }
+        }
+      }
+    },
+    "Canal SFTP non ouvert." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SFTP channel not open."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SFTP 通道未打开。"
           }
         }
       }
@@ -2088,6 +2445,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此 Shell 未上报当前工作文件夹。"
+          }
+        }
+      }
+    },
+    "Certains éléments système nécessitent un redémarrage." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some system elements require a relaunch."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "部分系统菜单与对话框需重启后生效。"
           }
         }
       }
@@ -2517,6 +2891,23 @@
         }
       }
     },
+    "Classique (fond noir)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Classic (Black Background)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "经典（黑底）"
+          }
+        }
+      }
+    },
     "Claude Code" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2806,6 +3197,23 @@
         }
       }
     },
+    "Configurez Antigravity (agy), Claude Code, Claude Desktop ou Codex, gérez les hôtes exposés et consultez le journal." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configure Antigravity (agy), Claude Code, Claude Desktop, or Codex, manage exposed hosts, and view the log."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "配置 Antigravity (agy)、Claude Code、Claude Desktop 或 Codex，管理已开放主机并查看日志。"
+          }
+        }
+      }
+    },
     "Configuré" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2976,6 +3384,23 @@
         }
       }
     },
+    "Connexion impossible : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to connect: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法连接：%@"
+          }
+        }
+      }
+    },
     "Connexion non établie." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3010,6 +3435,23 @@
         }
       }
     },
+    "Connexion perdue — nouvelle tentative dans %lld s" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection lost — retrying in %lld s"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接已断开 — %lld 秒后重试"
+          }
+        }
+      }
+    },
     "Connexion perdue — reconnexion en cours (tentative %lld)…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3023,6 +3465,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "连接已断开 — 正在重连（第 %lld 次尝试）…"
+          }
+        }
+      }
+    },
+    "Connexion perdue — reconnexion…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection lost — reconnecting…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接已断开 — 正在重连…"
           }
         }
       }
@@ -3091,6 +3550,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "快速连接…"
+          }
+        }
+      }
+    },
+    "Connexion rétablie le %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection restored on %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接已于 %@ 恢复"
           }
         }
       }
@@ -3363,6 +3839,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部复制"
+          }
+        }
+      }
+    },
+    "Couleurs et lisibilité" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colors & Readability"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "颜色与可读性"
           }
         }
       }
@@ -3792,6 +4285,23 @@
         }
       }
     },
+    "Dossier : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件夹：%@"
+          }
+        }
+      }
+    },
     "Dossier courant annoncé par le shell" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3839,6 +4349,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "空文件夹"
+          }
+        }
+      }
+    },
+    "Dossier « %@ »" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder “%@”"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件夹“%@”"
           }
         }
       }
@@ -4353,6 +4880,23 @@
         }
       }
     },
+    "Enregistrement impossible" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to Save"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法保存"
+          }
+        }
+      }
+    },
     "Enregistrement impossible sur le disque." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4366,6 +4910,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法保存到磁盘。"
+          }
+        }
+      }
+    },
+    "Enregistrement vide" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empty Recording"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "录制为空"
           }
         }
       }
@@ -4608,6 +5169,23 @@
         }
       }
     },
+    "Erreur SFTP (%@)." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SFTP error (%@)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SFTP 错误 (%@)。"
+          }
+        }
+      }
+    },
     "Erreur de connexion" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4723,6 +5301,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在当前面板中试用"
+          }
+        }
+      }
+    },
+    "Export impossible" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to Export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法导出"
           }
         }
       }
@@ -4982,6 +5577,23 @@
         }
       }
     },
+    "Fenêtre (taille dynamique)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Window (Dynamic Size)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "窗口（动态尺寸）"
+          }
+        }
+      }
+    },
     "Fermer" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5237,6 +5849,23 @@
         }
       }
     },
+    "Général" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通用"
+          }
+        }
+      }
+    },
     "Gérer les macros…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5475,6 +6104,23 @@
         }
       }
     },
+    "Il faut au moins deux panneaux." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "At least two panes are required."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "至少需要两个面板。"
+          }
+        }
+      }
+    },
     "Impaire" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5658,6 +6304,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导入会话"
+          }
+        }
+      }
+    },
+    "Impossible d'ouvrir « %@ »" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to open “%@”"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法打开“%@”"
           }
         }
       }
@@ -6002,6 +6665,23 @@
         }
       }
     },
+    "L'interface s'actualise immédiatement. Relancez Escale pour mettre à jour la barre des menus et les dialogues système." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The interface updates immediately. Relaunch Escale to update the menu bar and system dialogs."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "界面会立即切换。重新启动 Escale 以同步更新菜单栏和系统对话框。"
+          }
+        }
+      }
+    },
     "L'utilisateur ne peut pas commencer par « - »." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6253,6 +6933,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "启动 X11 应用…"
+          }
+        }
+      }
+    },
+    "Langue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
+          }
+        }
+      }
+    },
+    "Langue de l'interface" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interface language"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "界面语言"
           }
         }
       }
@@ -6818,6 +7532,40 @@
         }
       }
     },
+    "Macro « %@ »" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macro “%@”"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "宏“%@”"
+          }
+        }
+      }
+    },
+    "Macros" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macros"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "宏"
+          }
+        }
+      }
+    },
     "Macros du panneau actif" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6831,6 +7579,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "当前面板的宏"
+          }
+        }
+      }
+    },
+    "Macros illisibles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unreadable Macros"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取宏"
           }
         }
       }
@@ -7005,6 +7770,40 @@
         }
       }
     },
+    "Mode shell (SFTP indisponible)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shell mode (SFTP unavailable)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shell 模式（SFTP 不可用）"
+          }
+        }
+      }
+    },
+    "Modification de la bibliothèque refusée : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Library modification rejected: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主机库修改被拒绝：%@"
+          }
+        }
+      }
+    },
     "Modification non appliquée : %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7090,6 +7889,23 @@
         }
       }
     },
+    "Monitoring distant…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remote monitoring…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "远程监控…"
+          }
+        }
+      }
+    },
     "Monitoring en pause (connexion perdue)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7103,6 +7919,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "监控已暂停（连接已断开）"
+          }
+        }
+      }
+    },
+    "Monitoring indisponible : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitoring unavailable: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "监控不可用：%@"
           }
         }
       }
@@ -7192,6 +8025,23 @@
         }
       }
     },
+    "Mot de passe non enregistré dans le Trousseau (%@)." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password not saved in Keychain (%@)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "密码未保存到钥匙串 (%@)。"
+          }
+        }
+      }
+    },
     "Mot de passe oublié." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7222,6 +8072,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "需要密码"
+          }
+        }
+      }
+    },
+    "Mots-clés" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keywords"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关键词"
+          }
+        }
+      }
+    },
+    "Mots-clés et réseau" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keywords & Network"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关键词与网络"
           }
         }
       }
@@ -7409,6 +8293,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "留空则使用端口名称"
+          }
+        }
+      }
+    },
+    "Nom invalide." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid name."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名称无效。"
           }
         }
       }
@@ -8042,6 +8943,23 @@
         }
       }
     },
+    "Ouvrir la configuration des agents IA…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open AI Agents Configuration…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 AI 工具接入配置…"
+          }
+        }
+      }
+    },
     "Ouvrir un terminal local" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8229,6 +9147,23 @@
         }
       }
     },
+    "Papier (clair)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paper (Light)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "纸张（浅色）"
+          }
+        }
+      }
+    },
     "Parcourir les fichiers (SFTP)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8399,6 +9334,40 @@
         }
       }
     },
+    "Plein écran" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Screen"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全屏"
+          }
+        }
+      }
+    },
+    "Port" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Port"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "端口"
+          }
+        }
+      }
+    },
     "Port attribué par le serveur : %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8514,6 +9483,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "处理器（自上次采样以来的平均值）"
+          }
+        }
+      }
+    },
+    "Protocole %@ non pris en charge." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protocol %@ is not supported."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持 %@ 协议。"
           }
         }
       }
@@ -8756,6 +9742,23 @@
         }
       }
     },
+    "Relancer maintenant" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relaunch Now"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即重启"
+          }
+        }
+      }
+    },
     "Remplacer" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8926,6 +9929,40 @@
         }
       }
     },
+    "Réglages" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
+    "Réglages (⌘,)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings (⌘,)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置 (⌘,)"
+          }
+        }
+      }
+    },
     "Réglages OpenSSH par défaut" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8939,6 +9976,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "默认 OpenSSH 设置"
+          }
+        }
+      }
+    },
+    "Réglages…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置…"
           }
         }
       }
@@ -9181,6 +10235,23 @@
         }
       }
     },
+    "Session" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会话"
+          }
+        }
+      }
+    },
     "Session partagée (ne pas déconnecter les autres clients)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9334,6 +10405,40 @@
         }
       }
     },
+    "Solarized clair" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solarized Light"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solarized 浅色"
+          }
+        }
+      }
+    },
+    "Solarized sombre" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solarized Dark"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solarized 深色"
+          }
+        }
+      }
+    },
     "Son" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9385,6 +10490,23 @@
         }
       }
     },
+    "Standard (CR NUL)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard (CR NUL)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标准 (CR NUL)"
+          }
+        }
+      }
+    },
     "Suivant" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9402,6 +10524,23 @@
         }
       }
     },
+    "Suivre le système" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System Default"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跟随系统"
+          }
+        }
+      }
+    },
     "Suivre le terminal" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9415,6 +10554,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "跟随终端目录"
+          }
+        }
+      }
+    },
+    "Suppression impossible : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to delete: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法删除：%@"
           }
         }
       }
@@ -9504,6 +10660,23 @@
         }
       }
     },
+    "Supprimer « %@ » ?" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete “%@”?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确定要删除“%@”吗？"
+          }
+        }
+      }
+    },
     "Supprimer…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9521,6 +10694,57 @@
         }
       }
     },
+    "Sur ce Mac" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On this Mac"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在此 Mac 上"
+          }
+        }
+      }
+    },
+    "Sur l'ordinateur distant" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the remote computer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在远程计算机上"
+          }
+        }
+      }
+    },
+    "Surligne automatiquement les erreurs, avertissements, adresses IP et URL dans la sortie du terminal." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically highlights errors, warnings, IP addresses, and URLs in terminal output."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动高亮终端输出中的错误、警告、IP 地址与 URL。"
+          }
+        }
+      }
+    },
     "Surveillé — enregistrez pour envoyer" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9534,6 +10758,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在监视 — 保存即自动上传"
+          }
+        }
+      }
+    },
+    "Système" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跟随系统"
           }
         }
       }
@@ -9572,6 +10813,23 @@
         }
       }
     },
+    "Série" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serial"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "串口"
+          }
+        }
+      }
+    },
     "TOML Codex" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9606,6 +10864,40 @@
         }
       }
     },
+    "Taille fixe" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fixed Size"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "固定尺寸"
+          }
+        }
+      }
+    },
+    "Tango sombre" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tango Dark"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tango 深色"
+          }
+        }
+      }
+    },
     "Tapée dans le shell à chaque ouverture, puis le shell reste ouvert. Une seule ligne ; séparez les commandes par « ; »." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9619,6 +10911,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "每次打开会话时输入到 Shell 中执行，之后保持 Shell 打开。仅限单行；多条命令请用“;”分隔。"
+          }
+        }
+      }
+    },
+    "Telnet : module indisponible." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telnet: module unavailable."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telnet：模块不可用。"
           }
         }
       }
@@ -9670,6 +10979,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "本地终端"
+          }
+        }
+      }
+    },
+    "Terminal — %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminal — %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "终端 — %@"
           }
         }
       }
@@ -9929,6 +11255,23 @@
         }
       }
     },
+    "Tunnel SSH : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SSH tunnel: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SSH 隧道：%@"
+          }
+        }
+      }
+    },
     "Tunnel SSH non établi." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -9976,6 +11319,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法建立通往 Telnet 主机的隧道：%@"
+          }
+        }
+      }
+    },
+    "Tunnel « %@ » invalide." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tunnel “%@” is invalid."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隧道“%@”无效。"
+          }
+        }
+      }
+    },
+    "Tunnels" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tunnels"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隧道"
           }
         }
       }
@@ -10044,6 +11421,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隧道…"
+          }
+        }
+      }
+    },
+    "Type" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "类型"
           }
         }
       }
@@ -10286,6 +11680,23 @@
         }
       }
     },
+    "Utilisateur invalide." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid username."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户名无效。"
+          }
+        }
+      }
+    },
     "Utilisateurs connectés" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10405,6 +11816,23 @@
         }
       }
     },
+    "X11 non activé : " : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "X11 not enabled: "
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未启用 X11："
+          }
+        }
+      }
+    },
     "actif" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10490,6 +11918,40 @@
         }
       }
     },
+    "authentification requise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "authentication required"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要身份验证"
+          }
+        }
+      }
+    },
+    "auto" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "auto"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
+    },
     "autorisé" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10503,6 +11965,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已允许"
+          }
+        }
+      }
+    },
+    "canal SFTP non ouvert" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SFTP channel not open"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SFTP 通道未打开"
+          }
+        }
+      }
+    },
+    "canal SFTP source non ouvert" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "source SFTP channel not open"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "源 SFTP 通道未打开"
           }
         }
       }
@@ -10558,6 +12054,23 @@
         }
       }
     },
+    "connexion absente" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no connection"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无连接"
+          }
+        }
+      }
+    },
     "connexion en cours" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10571,6 +12084,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在连接"
+          }
+        }
+      }
+    },
+    "connexion indisponible" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "connection unavailable"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接不可用"
           }
         }
       }
@@ -10592,6 +12122,23 @@
         }
       }
     },
+    "connexion perdue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "connection lost"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连接已断开"
+          }
+        }
+      }
+    },
     "connexion…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10605,6 +12152,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在连接…"
+          }
+        }
+      }
+    },
+    "dossier" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "folder"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件夹"
           }
         }
       }
@@ -10779,6 +12343,23 @@
         }
       }
     },
+    "fichier introuvable : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "file not found: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到文件：%@"
+          }
+        }
+      }
+    },
     "fichier source modifié pendant la copie (%llu sur %llu octets lus)" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10843,6 +12424,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "禁止"
+          }
+        }
+      }
+    },
+    "lancement de %@ impossible : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unable to launch %@: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法启动 %@：%@"
           }
         }
       }
@@ -11047,6 +12645,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未执行"
+          }
+        }
+      }
+    },
+    "ouverture impossible" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unable to open"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法打开"
           }
         }
       }
@@ -11676,6 +13291,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "步骤"
+          }
+        }
+      }
+    },
+    "État" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "状态"
           }
         }
       }
