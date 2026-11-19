@@ -8,13 +8,15 @@ import EscaleCore
 /// Règles (AGENTS.md, invariant 21) :
 /// - désactivé par défaut ; socket Unix 0600 dans un dossier 0700, pair limité à l'uid de l'utilisateur, aucune écoute TCP ;
 /// - seuls les hôtes SSH de la bibliothèque dont `agentAccess != .none` sont visibles ;
-/// - aucun maître n'est jamais ouvert pour un agent : seuls les liens déjà connectés par l'utilisateur servent ;
+/// - par défaut aucun maître n'est ouvert pour un agent ; si l'utilisateur active `allowAutoConnect`, un hôte exposé
+///   peut être connecté à la demande (avec confirmation sur les hôtes `confirm`) et son bail est libéré à l'arrêt ;
 /// - les actions sur un hôte `confirm` attendent l'accord de l'utilisateur (panneau flottant, sans vol de focus) ;
 /// - chaque appel est journalisé en mémoire (jamais sur disque, jamais de contenu de fichier ni de sortie).
 @MainActor
 @Observable
 final class MCPFeature: AppFeature {
     static let enabledKey = "mcp.enabled"
+    static let autoConnectKey = "mcp.autoConnect"
     static let selfTestSuite = "com.attila-krb.Escale.selftest-mcp"
     static let maxJournal = 500
 
@@ -43,11 +45,19 @@ final class MCPFeature: AppFeature {
     }
 
     private(set) var isEnabled = false
+    private(set) var allowAutoConnect = false
     private(set) var isRunning = false
     private(set) var serverError: String?
     private(set) var clientCount = 0
     private(set) var journal: [JournalEntry] = []
     private(set) var pending: [Confirmation] = []
+    /// Liens SSH ouverts à la demande pour les agents (conservés entre appels jusqu'à l'arrêt ou la désactivation).
+    private(set) var agentRetainedLinks: [UUID: SSHLink] = [:]
+    /// État détecté des clients IA (`agy`, Claude Code, Claude Desktop, Codex).
+    private(set) var clientStatuses: [AIClientKind: AIClientStatus] = [:]
+    /// Message de retour suite à une action de configuration / copie d'un client IA.
+    private(set) var clientActionMessage: String?
+    private(set) var clientActionIsError = false
     var isSettingsPresented = false
 
     /// Recettes : réponse automatique aux confirmations (aucun panneau). nil = demander à l'utilisateur.
@@ -56,17 +66,26 @@ final class MCPFeature: AppFeature {
     @ObservationIgnored private var server: MCPSocketServer?
     @ObservationIgnored private var defaults: UserDefaults = .standard
     @ObservationIgnored private lazy var panel = MCPConfirmationPanel(feature: self)
+    @ObservationIgnored var clientConfigurator = AIClientConfigurator()
 
     let socketPath = MCPEndpoint.socketPath()
+
+    var activeAgentLinkCount: Int { agentRetainedLinks.count }
 
     func attach(_ model: AppModel) {
         self.model = model
         // Une recette n'écoute jamais sur le socket réel et ne lit pas les préférences de l'utilisateur.
         if model.options.isSelfTest { defaults = UserDefaults(suiteName: Self.selfTestSuite) ?? .standard }
+        allowAutoConnect = defaults.bool(forKey: Self.autoConnectKey)
+        model.connections.linkObservers["mcp"] = { [weak self] link, event in
+            guard event == .disconnected else { return }
+            self?.handleLinkDisconnected(link)
+        }
         if defaults.bool(forKey: Self.enabledKey) { setEnabled(true) }
     }
 
     func shutdown() async {
+        releaseAgentLinks()
         await stopServer()
         for c in pending { c.resume(false) }
         pending.removeAll()
@@ -79,6 +98,32 @@ final class MCPFeature: AppFeature {
         isEnabled = on
         defaults.set(on, forKey: Self.enabledKey)
         if on { startServer() } else { Task { await stopServer() } }
+    }
+
+    func setAutoConnect(_ on: Bool) {
+        allowAutoConnect = on
+        defaults.set(on, forKey: Self.autoConnectKey)
+        if !on { releaseAgentLinks() }
+    }
+
+    /// Libère tous les liens SSH ouverts à la demande pour les agents (les onglets utilisateur restent intacts).
+    func disconnectAgentLinks() {
+        releaseAgentLinks()
+    }
+
+    private func releaseAgentLinks() {
+        guard !agentRetainedLinks.isEmpty else { return }
+        let links = Array(agentRetainedLinks.values)
+        agentRetainedLinks.removeAll()
+        for link in links {
+            link.release()
+        }
+    }
+
+    private func handleLinkDisconnected(_ link: SSHLink) {
+        guard let held = agentRetainedLinks[link.profile.id], held === link else { return }
+        agentRetainedLinks.removeValue(forKey: link.profile.id)
+        link.tabCount = max(0, link.tabCount - 1)
     }
 
     private func startServer() {
@@ -98,6 +143,7 @@ final class MCPFeature: AppFeature {
     }
 
     private func stopServer() async {
+        releaseAgentLinks()
         guard let s = server else { return }
         server = nil; isRunning = false; clientCount = 0
         await Task.detached { s.stop() }.value
@@ -115,16 +161,77 @@ final class MCPFeature: AppFeature {
 
     /// Commande à copier pour déclarer Escale à un client MCP.
     var executablePath: String { Bundle.main.executablePath ?? "/Applications/Escale.app/Contents/MacOS/Escale" }
-    var claudeCodeCommand: String { "claude mcp add escale -- \(ShellQuote.word(executablePath)) --mcp" }
-    var jsonConfiguration: String {
-        let path = executablePath.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-        return """
-            {
-              "mcpServers": {
-                "escale": { "command": "\(path)", "args": ["--mcp"] }
-              }
-            }
-            """
+    var claudeCodeCommand: String { AIClientConfigurator.copySnippet(for: .claudeCode, executablePath: executablePath) }
+    var jsonConfiguration: String { AIClientConfigurator.jsonSnippet(executablePath: executablePath) }
+    var codexTOMLConfiguration: String { AIClientConfigurator.codexTOMLSnippet(executablePath: executablePath) }
+
+    // MARK: Configuration des clients IA (agy, Claude, Codex)
+
+    func refreshClientStatuses() {
+        let exe = executablePath
+        var next: [AIClientKind: AIClientStatus] = [:]
+        for client in AIClientKind.allCases {
+            next[client] = clientConfigurator.status(for: client, executablePath: exe)
+        }
+        clientStatuses = next
+    }
+
+    func status(for client: AIClientKind) -> AIClientStatus {
+        clientStatuses[client] ?? clientConfigurator.status(for: client, executablePath: executablePath)
+    }
+
+    func installClient(_ client: AIClientKind) {
+        do {
+            try clientConfigurator.install(for: client, executablePath: executablePath)
+            if !isEnabled { setEnabled(true) }
+            refreshClientStatuses()
+            clientActionIsError = false
+            clientActionMessage = String(localized: "\(client.displayName) configuré (\(client.displayConfigPath)).")
+        } catch {
+            refreshClientStatuses()
+            clientActionIsError = true
+            clientActionMessage = String(localized: "Impossible de configurer \(client.displayName) : \(error.localizedDescription)")
+        }
+    }
+
+    func uninstallClient(_ client: AIClientKind) {
+        do {
+            try clientConfigurator.uninstall(for: client)
+            refreshClientStatuses()
+            clientActionIsError = false
+            clientActionMessage = String(localized: "Entrée Escale retirée de \(client.displayName).")
+        } catch {
+            refreshClientStatuses()
+            clientActionIsError = true
+            clientActionMessage = String(localized: "Impossible de modifier \(client.displayName) : \(error.localizedDescription)")
+        }
+    }
+
+    func copySnippet(for client: AIClientKind) {
+        let snippet = AIClientConfigurator.copySnippet(for: client, executablePath: executablePath)
+        copyToPasteboard(snippet, label: client.displayName)
+    }
+
+    func copyToPasteboard(_ text: String, label: String) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        clientActionIsError = false
+        clientActionMessage = String(localized: "Configuration copiée pour \(label).")
+    }
+
+    /// Tous les hôtes SSH enregistrés dans la bibliothèque, triés par nom.
+    var sshHosts: [HostProfile] {
+        (model?.library.library.hosts ?? [])
+            .filter { $0.connectionProtocol == .ssh }
+            .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
+    /// Met à jour le niveau d'accès agent d'un hôte SSH directement depuis la fenêtre Agents IA.
+    func setHostAccess(_ access: AgentAccess, for host: HostProfile) {
+        guard host.agentAccess != access else { return }
+        var updated = host
+        updated.agentAccess = access
+        model?.library.upsert(updated)
     }
 
     // MARK: Confirmations
@@ -173,7 +280,25 @@ final class MCPFeature: AppFeature {
         (model?.library.library.hosts ?? []).filter { $0.connectionProtocol == .ssh && $0.agentAccess.allowsVisibility }
     }
 
-    private struct ToolFailure: Error { let message: String }
+    private struct ToolFailure: Error {
+        let message: String
+        var alreadyLogged = false
+    }
+
+    private func isHostConnected(_ host: HostProfile) -> Bool {
+        model?.connections.existing(host.id)?.links.contains(where: { $0.state == .connected }) == true
+    }
+
+    private func toolRequiresConnectedLink(_ tool: MCPCatalog.Tool) -> Bool {
+        switch tool {
+        case .connectHost, .exec, .listFiles, .readFile, .writeFile, .startTunnel: true
+        case .listHosts, .listSessions, .readTerminal, .sendInput, .listTunnels, .stopTunnel: false
+        }
+    }
+
+    private static func notConnectedMessage(for host: HostProfile) -> String {
+        "host '\(host.name)' is not connected: ask the user to open it in Escale first (or enable on-demand agent connections in Escale)"
+    }
 
     private func host(_ args: MCPArguments) throws -> HostProfile {
         let key = try args.string("host").trimmingCharacters(in: .whitespaces)
@@ -185,10 +310,52 @@ final class MCPFeature: AppFeature {
         throw ToolFailure(message: "unknown host '\(key)' (or not exposed to agents): see list_hosts")
     }
 
-    /// Lien maître déjà connecté par l'utilisateur, retenu pour la durée de l'appel. Jamais de connexion ouverte ici.
-    private func connectedLink(_ host: HostProfile) throws -> SSHLink {
-        guard let link = model?.connections.existing(host.id)?.links.first(where: { $0.state == .connected }) else {
-            throw ToolFailure(message: "host '\(host.name)' is not connected: ask the user to open it in Escale first")
+    /// Lien maître connecté, retenu pour la durée de l'appel (l'appelant libère par `link.release()`).
+    /// Si l'hôte est déconnecté et `allowAutoConnect` est actif, ouvre la connexion à la demande et garde un bail
+    /// dans `agentRetainedLinks` pour les appels suivants.
+    private func connectedLink(_ host: HostProfile, client: String, alreadyConfirmed: Bool) async throws -> SSHLink {
+        if let existing = model?.connections.existing(host.id)?.links.first(where: { $0.state == .connected }) {
+            existing.cancelGrace()
+            existing.tabCount += 1
+            return existing
+        }
+        guard allowAutoConnect else {
+            throw ToolFailure(message: Self.notConnectedMessage(for: host))
+        }
+        guard let model else { throw ToolFailure(message: "application stopped") }
+        let targetDetail = host.port.map { "\(host.target):\($0)" } ?? host.target
+        if host.agentAccess == .confirm && !alreadyConfirmed {
+            guard await confirm(.connectHost, client: client, host: host, detail: targetDetail) else {
+                log(client, .connectHost, host, targetDetail, .refusedByUser)
+                throw ToolFailure(message: "the user refused this action in Escale", alreadyLogged: true)
+            }
+            log(client, .connectHost, host, targetDetail, .approved)
+        }
+        let link: SSHLink
+        let createdLease: Bool
+        if let held = agentRetainedLinks[host.id] {
+            link = held
+            createdLease = false
+        } else {
+            link = model.connections.connection(for: host).acquireLink()
+            agentRetainedLinks[host.id] = link
+            createdLease = true
+        }
+        do {
+            try await link.ensureConnected()
+        } catch {
+            if createdLease, agentRetainedLinks[host.id] === link {
+                agentRetainedLinks.removeValue(forKey: host.id)
+                link.release()
+            }
+            throw ToolFailure(message: link.message(for: error))
+        }
+        guard isRunning, allowAutoConnect else {
+            if createdLease, agentRetainedLinks[host.id] === link {
+                agentRetainedLinks.removeValue(forKey: host.id)
+                link.release()
+            }
+            throw ToolFailure(message: "agent access or auto-connect was disabled while connecting")
         }
         link.cancelGrace()
         link.tabCount += 1
@@ -216,7 +383,7 @@ final class MCPFeature: AppFeature {
         do {
             switch tool {
             case .listHosts:
-                return .json(["hosts": .array(exposedHosts.map(hostJSON))])
+                return .json(["hosts": .array(exposedHosts.map(hostJSON)), "auto_connect": .bool(allowAutoConnect)])
             case .listSessions:
                 return .json(["sessions": .array(sessionsJSON())])
             default: break
@@ -232,7 +399,27 @@ final class MCPFeature: AppFeature {
             }
             target = h
             let summary = try describe(tool, call.arguments, host: h)
-            switch MCPPolicy.decide(tool.operation, access: h.agentAccess) {
+            var decision = MCPPolicy.decide(tool.operation, access: h.agentAccess)
+            if tool == .connectHost {
+                let openTab = try call.arguments.bool("open_tab", default: false)
+                // Sur un hôte en lecture seule, connect_host (sans ouvrir d'onglet) reste cohérent avec list_files/read_file.
+                if h.agentAccess == .read && !openTab {
+                    decision = .allow
+                } else if decision == .confirm && isHostConnected(h) && !openTab {
+                    // Réutilisation sans nouvelle connexion ni onglet : pas de confirmation inutile.
+                    decision = .allow
+                }
+            }
+            if case .deny(let m) = decision {
+                log(client, tool, h, summary, .denied(m))
+                return .error(m)
+            }
+            // Refuser immédiatement si l'hôte est déconnecté et l'auto-connexion désactivée (avant toute confirmation).
+            if toolRequiresConnectedLink(tool) && !isHostConnected(h) && !allowAutoConnect {
+                throw ToolFailure(message: Self.notConnectedMessage(for: h))
+            }
+            var confirmed = false
+            switch decision {
             case .deny(let m):
                 log(client, tool, h, summary, .denied(m))
                 return .error(m)
@@ -243,11 +430,12 @@ final class MCPFeature: AppFeature {
                     log(client, tool, h, summary, .refusedByUser)
                     return .error("the user refused this action in Escale")
                 }
+                confirmed = true
                 log(client, tool, h, summary, .approved)
             }
-            return try await run(tool, call.arguments, host: h, pane: p)
+            return try await run(tool, call.arguments, host: h, pane: p, client: client, alreadyConfirmed: confirmed)
         } catch let e as ToolFailure {
-            if let target { markFailure(client, tool, target, e.message) }
+            if let target, !e.alreadyLogged { markFailure(client, tool, target, e.message) }
             return .error(e.message)
         } catch let e as MCPArgumentError {
             return .error(e.message)
@@ -271,6 +459,8 @@ final class MCPFeature: AppFeature {
     /// Résumé affiché à l'utilisateur (confirmation, journal) : ce que l'agent demande, sans le contenu des fichiers.
     private func describe(_ tool: MCPCatalog.Tool, _ a: MCPArguments, host: HostProfile) throws -> String {
         switch tool {
+        case .connectHost:
+            return host.port.map { "\(host.target):\($0)" } ?? host.target
         case .exec: return try a.string("command")
         case .sendInput:
             let t = try a.string("text")
@@ -290,8 +480,31 @@ final class MCPFeature: AppFeature {
         }
     }
 
-    private func run(_ tool: MCPCatalog.Tool, _ a: MCPArguments, host: HostProfile, pane: Pane?) async throws -> MCPToolResult {
+    private func run(_ tool: MCPCatalog.Tool, _ a: MCPArguments, host: HostProfile, pane: Pane?,
+                     client: String, alreadyConfirmed: Bool) async throws -> MCPToolResult {
         switch tool {
+        case .connectHost:
+            let openTab = try a.bool("open_tab", default: false)
+            let alreadyConnected = model?.connections.existing(host.id)?.links.contains(where: { $0.state == .connected }) == true
+            let link = try await connectedLink(host, client: client, alreadyConfirmed: alreadyConfirmed)
+            defer { link.release() }
+            var sessionID: String?
+            if openTab, let model {
+                if let existingPane = panes.first(where: { $0.hostID == host.id }) {
+                    sessionID = existingPane.id.uuidString
+                } else {
+                    let tab = model.newTab(host)
+                    sessionID = tab.panes.first?.id.uuidString
+                }
+            }
+            var payload: [String: JSONValue] = [
+                "host_id": .string(host.id.uuidString),
+                "host": .string(host.name),
+                "state": .string(Self.stateName(link.state)),
+                "already_connected": .bool(alreadyConnected),
+            ]
+            if let sessionID { payload["session_id"] = .string(sessionID) }
+            return .json(.object(payload))
         case .readTerminal:
             guard let pane else { throw ToolFailure(message: "no session") }
             let n = try a.int("max_lines", default: 200, range: 1...MCPCatalog.maxTerminalLines)
@@ -312,7 +525,7 @@ final class MCPFeature: AppFeature {
             let command = try a.string("command")
             guard !command.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw ToolFailure(message: "empty command") }
             let timeout = try a.int("timeout_seconds", default: 60, range: 1...MCPCatalog.maxExecTimeout)
-            let link = try connectedLink(host)
+            let link = try await connectedLink(host, client: client, alreadyConfirmed: alreadyConfirmed)
             defer { link.release() }
             let r = try await link.transport.exec(command, timeout: TimeInterval(timeout), maxOutputBytes: MCPCatalog.maxExecOutputBytes)
             if let f = r.failure { throw ToolFailure(message: f) }
@@ -325,7 +538,7 @@ final class MCPFeature: AppFeature {
             res.isError = r.timedOut
             return res
         case .listFiles, .readFile, .writeFile:
-            let link = try connectedLink(host)
+            let link = try await connectedLink(host, client: client, alreadyConfirmed: alreadyConfirmed)
             defer { link.release() }
             let fs = try await RemoteFileSystemOpener.open(transport: link.transport).fileSystem
             do {
@@ -345,8 +558,8 @@ final class MCPFeature: AppFeature {
                 _ = await model.tunnels.stop(spec, on: host)
                 return .json(tunnelJSON(spec))
             }
-            // Le module Tunnels connecterait l'hôte au besoin : un agent n'ouvre jamais de maître.
-            let link = try connectedLink(host)
+            // Le module Tunnels connecterait l'hôte au besoin : on passe toujours par `connectedLink` qui applique `allowAutoConnect`.
+            let link = try await connectedLink(host, client: client, alreadyConfirmed: alreadyConfirmed)
             defer { link.release() }
             let state = await model.tunnels.start(spec, on: host)
             if case .failed(let m) = state { throw ToolFailure(message: m) }

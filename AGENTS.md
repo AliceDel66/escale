@@ -70,10 +70,12 @@ avec sa traduction `en` (Xcode l'y fait apparaitre a la compilation). Ne jamais 
     le premier octet d'un panneau (`AppModel.paneStartObservers`).
 21. Acces des agents IA (MCP, `docs/MCP.md`) : desactive par defaut ; socket Unix 0600 dans un dossier 0700, pair de meme uid
     verifie des deux cotes, aucune ecoute TCP ; `Escale --mcp` relaie seulement (ne lance jamais l'app). Seuls les hotes SSH
-    de la bibliotheque avec `agentAccess != .none` sont visibles ; un agent n'ouvre jamais de maitre (liens deja connectes
-    seuls, retenus le temps de l'appel) ; une action (`MCPOperation.action`) sur un hote `confirm` attend l'accord de
-    l'utilisateur et un client deconnecte retire sa demande. Aucun secret dans une reponse ; journal en memoire seulement.
-    Une recette n'utilise jamais le socket ni les preferences reels (`ESCALE_MCP_SOCKET`, suite de defaults isolee).
+    de la bibliotheque avec `agentAccess != .none` sont visibles ; par defaut un agent n'ouvre jamais de maitre (liens deja
+    connectes seuls, retenus le temps de l'appel), et si `mcp.autoConnect` est active par l'utilisateur les hotes `confirm`
+    demandent confirmation et les baux retenus sont liberes a l'arret ; une action (`MCPOperation.action`) sur un hote
+    `confirm` attend l'accord de l'utilisateur et un client deconnecte retire sa demande. Aucun secret dans une reponse ;
+    journal en memoire seulement. Une recette n'utilise jamais le socket ni les preferences reels (`ESCALE_MCP_SOCKET`,
+    suite de defaults isolee).
 
 ## Conventions
 - Swift 6, concurrence stricte. Commentaires en francais. Sujets de commit sans accents.

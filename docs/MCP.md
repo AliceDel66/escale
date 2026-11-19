@@ -1,29 +1,52 @@
 # Accès des agents IA (MCP)
 
-Escale est un **serveur MCP** (Model Context Protocol) local : un agent IA (Claude Code, Cursor, Claude Desktop,
-Hermes…) peut agir sur vos hôtes SSH à travers les connexions que vous avez déjà ouvertes dans Escale. L'agent
-ne se connecte jamais lui-même : les authentifications (mot de passe, 2FA, bastions) restent les vôtres.
+Escale est un **serveur MCP** (Model Context Protocol) local : un agent IA (**Antigravity / `agy`**, **Claude Code / `claude`**,
+**Claude Desktop**, **Codex / `codex`**, Cursor, Hermes…) peut agir sur vos hôtes SSH déjà enregistrés dans Escale.
+Par défaut, l'agent n'utilise que les connexions déjà ouvertes ; une option explicite permet aussi d'autoriser
+l'ouverture de la connexion SSH à la demande (en réutilisant vos clés / secrets Trousseau configurés dans Escale).
 
-## Activer
+## Activer et connecter vos outils IA
 
-1. Menu **Présentation › Accès des agents (MCP)…**, puis cochez « Autoriser l'accès des agents ».
-2. Dans la fiche de chaque hôte SSH à exposer (onglet **Avancé**), réglez **Accès des agents (MCP)** :
+1. Ouvrez la fenêtre **Agents IA (MCP)** depuis :
+   - la barre d'outils principale (**Agents IA**),
+   - le volet latéral **Outils › Agents IA (agy, Claude, Codex)…**,
+   - ou le menu **Présentation › Accès des agents (MCP)…**.
+2. Cliquez sur **Configurer** en face de votre outil IA (active aussi le serveur MCP si nécessaire) :
 
-| Niveau | Lecture (hôtes, sessions, terminal, fichiers, tunnels) | Actions (commande, saisie, écriture, tunnel) |
+| Outil IA | Fichier configuré (écriture atomique non destructive) |
+|---|---|
+| Antigravity (`agy`) | `~/.gemini/config/mcp_config.json` (`mcpServers.escale`) |
+| Claude Code (`claude`) | `~/.claude.json` (`mcpServers.escale`, transport `stdio`) |
+| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` (`mcpServers.escale`) |
+| Codex (`codex`) | `~/.codex/config.toml` (`[mcp_servers.escale]`) |
+
+3. Dans la section **Hôtes SSH et autorisations** (ou dans la fiche de chaque hôte, onglet **Avancé**), réglez le niveau d'accès :
+
+| Niveau | Lecture (hôtes, sessions, terminal, fichiers, tunnels) | Actions (connexion, commande, saisie, écriture, tunnel) |
 |---|---|---|
 | Aucun (défaut) | hôte invisible | — |
 | Lecture seule | oui | refusées |
 | Actions avec confirmation | oui | panneau de confirmation pour chaque action |
 | Actions sans confirmation | oui | sans demander (journalisées) |
 
-3. Déclarez Escale dans le client (les deux commandes sont copiables depuis la fenêtre des réglages) :
+4. Optionnel : cochez **« Ouvrir automatiquement la connexion SSH à la demande de l'agent »** pour permettre aux agents de se
+   connecter à un hôte exposé même sans onglet ouvert (désactivé par défaut ; demande confirmation sur les hôtes `confirm`).
+
+Des boutons **Copier** permettent aussi de récupérer la commande CLI ou l'extrait JSON/TOML :
 
 ```sh
-claude mcp add escale -- /Applications/Escale.app/Contents/MacOS/Escale --mcp
+claude mcp add --scope user escale -- /Applications/Escale.app/Contents/MacOS/Escale --mcp
+codex mcp add escale -- /Applications/Escale.app/Contents/MacOS/Escale --mcp
 ```
 
 ```json
 { "mcpServers": { "escale": { "command": "/Applications/Escale.app/Contents/MacOS/Escale", "args": ["--mcp"] } } }
+```
+
+```toml
+[mcp_servers.escale]
+command = "/Applications/Escale.app/Contents/MacOS/Escale"
+args = ["--mcp"]
 ```
 
 `Escale --mcp` est un relais stdio vers l'app en service : il ne lance pas Escale et échoue (code 1, message sur stderr)
@@ -33,7 +56,8 @@ si l'app est fermée ou l'accès désactivé.
 
 | Outil | Nature | Rôle |
 |---|---|---|
-| `list_hosts` | lecture | hôtes exposés : id, nom, adresse, utilisateur, niveau, état de connexion |
+| `list_hosts` | lecture | hôtes exposés : id, nom, adresse, utilisateur, niveau, état de connexion et drapeau `auto_connect` |
+| `connect_host` | action | ouvre (ou réutilise) la connexion SSH d'un hôte exposé quand `auto_connect` est actif (option `open_tab`) |
 | `list_sessions` | lecture | panneaux de terminal ouverts sur ces hôtes |
 | `read_terminal` | lecture | dernières lignes d'un panneau (écran + historique) |
 | `send_input` | action | saisie dans un panneau, comme au clavier (caractères de contrôle permis) |
@@ -49,7 +73,9 @@ si l'app est fermée ou l'accès désactivé.
   dossier 0700), pair vérifié (même uid, des deux côtés).
 - Aucun hôte hors bibliothèque ; protocoles non SSH jamais exposés ; aucun secret dans les réponses (ni mot de passe,
   ni compte Trousseau, ni chemin de clé).
-- Un agent n'ouvre jamais de connexion : un hôte déconnecté renvoie une erreur (« ouvrez-le dans Escale »).
+- Par défaut, un agent n'ouvre jamais de connexion : un hôte déconnecté renvoie une erreur (« ouvrez-le dans Escale »).
+  Si l'utilisateur active explicitement la connexion à la demande, les hôtes `confirm` demandent confirmation avant
+  ouverture et les baux ouverts pour les agents sont libérés à l'arrêt du serveur ou à la désactivation de l'option.
 - Les sorties distantes sont des données non fiables (injection de prompt) : c'est la raison du niveau « avec
   confirmation ». Le panneau de confirmation flotte au-dessus des autres apps sans prendre le focus ; une demande
   disparaît si le client se déconnecte.

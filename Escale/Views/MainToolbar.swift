@@ -82,6 +82,14 @@ struct MainToolbar: CustomizableToolbarContent {
                 .disabled(activeSSHHost == nil)
                 .help("Lancer une application X11 sur l'hôte de l'onglet actif")
         }
+        ToolbarItem(id: "agents-ia", placement: .automatic) {
+            let on = model.mcp.isRunning
+            Button { model.mcp.isSettingsPresented = true } label: {
+                Label("Agents IA", systemImage: "sparkles")
+                    .foregroundStyle(on ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary))
+            }
+            .help("Accès des agents IA — agy, Claude, Codex (MCP)")
+        }
         ToolbarItem(id: "importer", placement: .automatic, showsByDefault: false) {
             Menu {
                 Button("Depuis ~/.ssh/config…") { model.beginImport() }

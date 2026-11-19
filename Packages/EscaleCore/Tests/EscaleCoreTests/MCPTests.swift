@@ -132,7 +132,7 @@ private func parse(_ d: Data?) throws -> JSONValue { try MCPJSON.decode(try #req
         let defs = MCPCatalog.definitions
         #expect(Set(defs.map(\.name)).count == MCPCatalog.Tool.allCases.count)
         let actions = Set(defs.filter { $0.operation == .action }.map(\.name))
-        #expect(actions == ["send_input", "exec", "write_file", "start_tunnel", "stop_tunnel"])
+        #expect(actions == ["connect_host", "send_input", "exec", "write_file", "start_tunnel", "stop_tunnel"])
         for d in defs { #expect(d.inputSchema["type"] == "object"); #expect(!d.description.isEmpty) }
     }
 

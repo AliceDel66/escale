@@ -79,6 +79,7 @@ struct MCPConfirmationView: View {
     static func title(_ t: MCPCatalog.Tool) -> String {
         switch t {
         case .exec: String(localized: "exécuter une commande")
+        case .connectHost: String(localized: "ouvrir la connexion SSH")
         case .sendInput: String(localized: "saisir dans un terminal")
         case .writeFile: String(localized: "écrire un fichier")
         case .startTunnel: String(localized: "ouvrir un tunnel")
@@ -102,59 +103,220 @@ struct MCPSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Accès des agents (MCP)").font(.title2.bold())
-            Text("Escale expose ses hôtes aux agents IA (Claude Code, Hermes, Cursor…) par le protocole MCP, sur un socket local réservé à votre compte. Un agent n'utilise que les connexions que vous avez déjà ouvertes et seulement les hôtes dont l'accès est réglé dans leur fiche (onglet Avancé).")
-                .font(.callout).foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Toggle("Autoriser l'accès des agents", isOn: Binding(get: { feature.isEnabled }, set: { feature.setEnabled($0) }))
-                .toggleStyle(.switch)
-            status
-
-            GroupBox("Configuration du client") {
-                VStack(alignment: .leading, spacing: 8) {
-                    copyRow(String(localized: "Claude Code"), feature.claudeCodeCommand)
-                    copyRow(String(localized: "JSON (Cursor, Claude Desktop, Hermes…)"), feature.jsonConfiguration)
-                }
-                .padding(4)
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Accès des agents IA (MCP)").font(.title2.bold())
+                Text("Exposez vos hôtes SSH à Antigravity (agy), Claude Code, Claude Desktop ou Codex par le protocole MCP sur un socket local réservé à votre compte.")
+                    .font(.callout).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
-            GroupBox("Hôtes exposés") {
-                let hosts = feature.exposedHosts
-                if hosts.isEmpty {
-                    Text("Aucun hôte : réglez « Accès des agents » dans la fiche d'un hôte SSH.")
-                        .foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading).padding(4)
-                } else {
-                    VStack(alignment: .leading, spacing: 4) {
-                        ForEach(hosts) { h in
-                            HStack {
-                                Text(h.name)
-                                Spacer()
-                                Text(AgentAccessEditorSection.label(h.agentAccess)).foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                    .padding(4)
-                }
-            }
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("Autoriser l'accès des agents", isOn: Binding(get: { feature.isEnabled }, set: { feature.setEnabled($0) }))
+                    .toggleStyle(.switch)
 
-            GroupBox {
-                journal
-            } label: {
-                HStack {
-                    Text("Journal")
+                VStack(alignment: .leading, spacing: 2) {
+                    Toggle("Ouvrir automatiquement la connexion SSH à la demande de l'agent",
+                           isOn: Binding(get: { feature.allowAutoConnect }, set: { feature.setAutoConnect($0) }))
+                        .toggleStyle(.switch)
+                    Text("Autorise un agent à connecter un hôte SSH exposé même sans onglet ouvert (avec confirmation sur les hôtes réglés en confirmation).")
+                        .font(.caption).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                HStack(spacing: 12) {
+                    status
                     Spacer()
-                    Button("Effacer") { feature.clearJournal() }.disabled(feature.journal.isEmpty)
+                    if feature.activeAgentLinkCount > 0 {
+                        Button("Déconnecter les liaisons IA (\(feature.activeAgentLinkCount))") {
+                            feature.disconnectAgentLinks()
+                        }
+                        .controlSize(.small)
+                    }
                 }
+            }
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    aiClientsBox
+                    hostsAccessBox
+                    journalBox
+                }
+                .padding(.trailing, 2)
             }
 
             HStack {
+                Button("Actualiser") { feature.refreshClientStatuses() }
                 Spacer()
                 Button("Fermer") { dismiss() }.keyboardShortcut(.defaultAction)
             }
         }
         .padding(20)
-        .frame(width: 620, height: 680)
+        .frame(width: 680, height: 740)
+        .onAppear { feature.refreshClientStatuses() }
+    }
+
+    private var aiClientsBox: some View {
+        GroupBox("Outils IA compatibles") {
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(AIClientKind.allCases) { client in
+                    aiClientRow(client)
+                    if client != AIClientKind.allCases.last { Divider() }
+                }
+
+                Divider()
+                HStack(spacing: 8) {
+                    Text("Copie manuelle :")
+                        .font(.caption).foregroundStyle(.secondary)
+                    Button("JSON générique") {
+                        feature.copyToPasteboard(feature.jsonConfiguration, label: "JSON")
+                    }
+                    .controlSize(.small)
+                    Button("TOML Codex") {
+                        feature.copyToPasteboard(feature.codexTOMLConfiguration, label: "Codex TOML")
+                    }
+                    .controlSize(.small)
+                    Spacer()
+                }
+
+                if let msg = feature.clientActionMessage {
+                    Label(msg, systemImage: feature.clientActionIsError ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(feature.clientActionIsError ? .orange : .green)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(6)
+        }
+    }
+
+    @ViewBuilder
+    private func aiClientRow(_ client: AIClientKind) -> some View {
+        let st = feature.status(for: client)
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(client.displayName).font(.body.weight(.medium))
+                Text(client.displayConfigPath)
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+            Spacer(minLength: 8)
+            statusBadge(st)
+            HStack(spacing: 6) {
+                switch st {
+                case .configured:
+                    Button("Retirer") { feature.uninstallClient(client) }
+                        .controlSize(.small)
+                case .needsUpdate:
+                    Button("Mettre à jour") { feature.installClient(client) }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                case .notConfigured, .notInstalled:
+                    Button("Configurer") { feature.installClient(client) }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                case .parseError:
+                    Button("Configurer") {}
+                        .controlSize(.small)
+                        .disabled(true)
+                }
+                Button("Copier") { feature.copySnippet(for: client) }
+                    .controlSize(.small)
+                    .help(String(localized: "Copier la commande ou la configuration pour \(client.displayName)"))
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func statusBadge(_ st: AIClientStatus) -> some View {
+        switch st {
+        case .configured:
+            Label("Configuré", systemImage: "checkmark.circle.fill")
+                .font(.caption).foregroundStyle(.green)
+        case .needsUpdate(let oldPath):
+            Label("Chemin différent", systemImage: "exclamationmark.circle.fill")
+                .font(.caption).foregroundStyle(.orange)
+                .help(oldPath)
+        case .notConfigured:
+            Text("Non configuré")
+                .font(.caption).foregroundStyle(.secondary)
+        case .notInstalled:
+            Text("Non détecté")
+                .font(.caption).foregroundStyle(.tertiary)
+        case .parseError(let detail):
+            Label("Erreur de lecture", systemImage: "xmark.octagon.fill")
+                .font(.caption).foregroundStyle(.red)
+                .help(detail)
+        }
+    }
+
+    private var hostsAccessBox: some View {
+        let allHosts = feature.sshHosts
+        let exposedCount = allHosts.filter { $0.agentAccess.allowsVisibility }.count
+        return GroupBox {
+            if allHosts.isEmpty {
+                Text("Aucun hôte SSH enregistré dans la bibliothèque.")
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(6)
+            } else {
+                VStack(alignment: .leading, spacing: 6) {
+                    ForEach(allHosts) { host in
+                        hostAccessRow(host)
+                        if host.id != allHosts.last?.id { Divider() }
+                    }
+                }
+                .padding(6)
+            }
+        } label: {
+            HStack {
+                Text("Hôtes SSH et autorisations")
+                Spacer()
+                Text("\(exposedCount)/\(allHosts.count) exposés")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func hostAccessRow(_ host: HostProfile) -> some View {
+        let connState = model.connections.state(of: host.id)
+        return HStack(spacing: 10) {
+            Circle()
+                .fill(Self.connectionDotColor(connState))
+                .frame(width: 8, height: 8)
+                .help(Self.connectionStateLabel(connState))
+            VStack(alignment: .leading, spacing: 1) {
+                Text(host.name).lineLimit(1)
+                Text(host.port.map { "\(host.target):\($0)" } ?? host.target)
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 8)
+            Picker("", selection: Binding(
+                get: { host.agentAccess },
+                set: { feature.setHostAccess($0, for: host) }
+            )) {
+                ForEach(AgentAccess.allCases, id: \.self) { access in
+                    Text(AgentAccessEditorSection.label(access)).tag(access)
+                }
+            }
+            .labelsHidden()
+            .frame(width: 210)
+        }
+    }
+
+    private var journalBox: some View {
+        GroupBox {
+            journal
+        } label: {
+            HStack {
+                Text("Journal")
+                Spacer()
+                Button("Effacer") { feature.clearJournal() }.disabled(feature.journal.isEmpty)
+            }
+        }
     }
 
     @ViewBuilder private var status: some View {
@@ -169,39 +331,51 @@ struct MCPSettingsView: View {
         }
     }
 
-    private func copyRow(_ title: String, _ value: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack {
-                Text(title).font(.caption).foregroundStyle(.secondary)
-                Spacer()
-                Button("Copier") {
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(value, forType: .string)
+    private var journal: some View {
+        Group {
+            if feature.journal.isEmpty {
+                Text("Aucune activité enregistrée pour cette session.")
+                    .font(.caption).foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 80, alignment: .center)
+            } else {
+                List(feature.journal.reversed()) { e in
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack {
+                            Text(e.date, style: .time).monospacedDigit()
+                            Text(e.tool).font(.system(.body, design: .monospaced))
+                            if let h = e.hostName { Text(h).foregroundStyle(.secondary) }
+                            Spacer()
+                            Text(Self.outcome(e.outcome)).foregroundStyle(Self.color(e.outcome))
+                        }
+                        if !e.summary.isEmpty {
+                            Text(e.summary).font(.system(.caption, design: .monospaced)).lineLimit(2).foregroundStyle(.secondary)
+                        }
+                        Text(e.client).font(.caption2).foregroundStyle(.tertiary)
+                    }
                 }
-                .controlSize(.small)
+                .frame(minHeight: 140, maxHeight: 200)
             }
-            Text(value).font(.system(.caption, design: .monospaced)).textSelection(.enabled)
-                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
-    private var journal: some View {
-        List(feature.journal.reversed()) { e in
-            VStack(alignment: .leading, spacing: 2) {
-                HStack {
-                    Text(e.date, style: .time).monospacedDigit()
-                    Text(e.tool).font(.system(.body, design: .monospaced))
-                    if let h = e.hostName { Text(h).foregroundStyle(.secondary) }
-                    Spacer()
-                    Text(Self.outcome(e.outcome)).foregroundStyle(Self.color(e.outcome))
-                }
-                if !e.summary.isEmpty {
-                    Text(e.summary).font(.system(.caption, design: .monospaced)).lineLimit(2).foregroundStyle(.secondary)
-                }
-                Text(e.client).font(.caption2).foregroundStyle(.tertiary)
-            }
+    private static func connectionDotColor(_ state: SSHLink.State) -> Color {
+        switch state {
+        case .connected: .green
+        case .connecting, .reconnecting: .orange
+        case .disconnected, .cancelled: .secondary.opacity(0.45)
+        case .authRequired, .failed, .hostKeyChanged: .red
         }
-        .frame(minHeight: 160)
+    }
+
+    private static func connectionStateLabel(_ state: SSHLink.State) -> String {
+        switch state {
+        case .connected: String(localized: "Connecté")
+        case .connecting: String(localized: "Connexion en cours")
+        case .reconnecting: String(localized: "Reconnexion en cours")
+        case .disconnected, .cancelled: String(localized: "Déconnecté")
+        case .authRequired: String(localized: "Authentification requise")
+        case .failed, .hostKeyChanged: String(localized: "Erreur de connexion")
+        }
     }
 
     static func outcome(_ o: MCPFeature.JournalEntry.Outcome) -> String {

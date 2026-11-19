@@ -24,6 +24,11 @@ struct ToolsPane: View {
                 .disabled(activeSSHHost == nil)
                 ToolRow("Fichiers distants (SFTP)", symbol: "folder", detail: "volet Fichiers") { model.sftp.toggle() }
             }
+            Section("Agents IA") {
+                ToolRow("Agents IA (agy, Claude, Codex)…", symbol: "sparkles", detail: mcpSummary) {
+                    model.mcp.isSettingsPresented = true
+                }
+            }
             Section("Multi-exécution") {
                 ToolRow(multi.isBroadcasting ? "Arrêter la diffusion" : "Diffuser la saisie", symbol: "dot.radiowaves.left.and.right",
                         detail: multi.isBroadcasting ? "\(multi.broadcastPaneIDs.count) panneaux" : "même frappe dans plusieurs panneaux") {
@@ -53,6 +58,14 @@ struct ToolsPane: View {
     private var activeTunnelSummary: LocalizedStringKey? {
         let n = model.tunnels.states.values.filter(\.isActive).count
         return n == 0 ? nil : (n == 1 ? "1 actif" : "\(n) actifs")
+    }
+
+    private var mcpSummary: LocalizedStringKey {
+        if model.mcp.isRunning {
+            let n = model.mcp.clientCount
+            return n == 0 ? "en écoute" : (n == 1 ? "1 client" : "\(n) clients")
+        }
+        return "désactivé"
     }
 }
 

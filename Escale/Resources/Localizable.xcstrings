@@ -67,6 +67,17 @@
         }
       }
     },
+    "%@ configuré (%@)." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ configured (%@)."
+          }
+        }
+      }
+    },
     "%@ demande : %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -129,6 +140,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld baud"
+          }
+        }
+      }
+    },
+    "%lld clients" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld clients"
           }
         }
       }
@@ -210,6 +232,17 @@
         }
       }
     },
+    "%lld/%lld exposés" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld exposed"
+          }
+        }
+      }
+    },
     "%lld/%lld terminés" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -250,6 +283,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 active"
+          }
+        }
+      }
+    },
+    "1 client" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 client"
           }
         }
       }
@@ -338,6 +382,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Agent Access (MCP)…"
+          }
+        }
+      }
+    },
+    "Accès des agents IA (MCP)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI Agent Access (MCP)"
+          }
+        }
+      }
+    },
+    "Accès des agents IA — agy, Claude, Codex (MCP)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI Agent Access — agy, Claude, Codex (MCP)"
           }
         }
       }
@@ -536,6 +602,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ssh agent, default keys and ~/.ssh/config."
+          }
+        }
+      }
+    },
+    "Agents IA" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI Agents"
+          }
+        }
+      }
+    },
+    "Agents IA (agy, Claude, Codex)…" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI Agents (agy, Claude, Codex)…"
           }
         }
       }
@@ -815,6 +903,17 @@
         }
       }
     },
+    "Aucun hôte SSH enregistré dans la bibliothèque." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No SSH hosts saved in the library."
+          }
+        }
+      }
+    },
     "Aucun hôte enregistré" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -888,6 +987,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "None"
+          }
+        }
+      }
+    },
+    "Aucune activité enregistrée pour cette session." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No activity recorded for this session."
           }
         }
       }
@@ -1002,6 +1112,17 @@
         }
       }
     },
+    "Authentification requise" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Authentication required"
+          }
+        }
+      }
+    },
     "Authentification…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1009,6 +1130,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Authenticating…"
+          }
+        }
+      }
+    },
+    "Autorise un agent à connecter un hôte SSH exposé même sans onglet ouvert (avec confirmation sur les hôtes réglés en confirmation)." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allows an agent to connect to an exposed SSH host even without an open tab (with confirmation on hosts set to confirm)."
           }
         }
       }
@@ -1295,6 +1427,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Path"
+          }
+        }
+      }
+    },
+    "Chemin différent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Different path"
           }
         }
       }
@@ -1640,6 +1783,17 @@
         }
       }
     },
+    "Configuration copiée pour %@." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configuration copied for %@."
+          }
+        }
+      }
+    },
     "Configuration du client" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1647,6 +1801,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Client configuration"
+          }
+        }
+      }
+    },
+    "Configurer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configure"
+          }
+        }
+      }
+    },
+    "Configuré" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configured"
           }
         }
       }
@@ -1724,6 +1900,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connecting over SSH to %@…"
+          }
+        }
+      }
+    },
+    "Connexion en cours" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecting"
           }
         }
       }
@@ -1904,6 +2091,17 @@
         }
       }
     },
+    "Copie manuelle :" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manual copy:"
+          }
+        }
+      }
+    },
     "Copier" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1922,6 +2120,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Copy %@"
+          }
+        }
+      }
+    },
+    "Copier la commande ou la configuration pour %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy command or configuration for %@"
           }
         }
       }
@@ -2388,6 +2597,17 @@
         }
       }
     },
+    "Déconnecter les liaisons IA (%lld)" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnect AI links (%lld)"
+          }
+        }
+      }
+    },
     "Déconnecté" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2652,6 +2872,17 @@
         }
       }
     },
+    "Entrée Escale retirée de %@." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removed Escale entry from %@."
+          }
+        }
+      }
+    },
     "Envoie Ctrl + Alt + Suppr au serveur" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2751,6 +2982,28 @@
         }
       }
     },
+    "Erreur de connexion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connection error"
+          }
+        }
+      }
+    },
+    "Erreur de lecture" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read error"
+          }
+        }
+      }
+    },
     "Escale expose ses hôtes aux agents IA (Claude Code, Hermes, Cursor…) par le protocole MCP, sur un socket local réservé à votre compte. Un agent n'utilise que les connexions que vous avez déjà ouvertes et seulement les hôtes dont l'accès est réglé dans leur fiche (onglet Avancé)." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2835,6 +3088,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Export…"
+          }
+        }
+      }
+    },
+    "Exposez vos hôtes SSH à Antigravity (agy), Claude Code, Claude Desktop ou Codex par le protocole MCP sur un socket local réservé à votre compte." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expose your SSH hosts to Antigravity (agy), Claude Code, Claude Desktop, or Codex over MCP on a local socket private to your account."
           }
         }
       }
@@ -3235,6 +3499,17 @@
         }
       }
     },
+    "Hôtes SSH et autorisations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SSH Hosts & Permissions"
+          }
+        }
+      }
+    },
     "Hôtes connectés" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3389,6 +3664,28 @@
         }
       }
     },
+    "Impossible de configurer %@ : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to configure %@: %@"
+          }
+        }
+      }
+    },
+    "Impossible de modifier %@ : %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to update %@: %@"
+          }
+        }
+      }
+    },
     "Information demandée par le serveur" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3440,6 +3737,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "JSON (Cursor, Claude Desktop, Hermes…)"
+          }
+        }
+      }
+    },
+    "JSON générique" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generic JSON"
           }
         }
       }
@@ -4192,6 +4500,17 @@
         }
       }
     },
+    "Mettre à jour" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
+          }
+        }
+      }
+    },
     "Mode compact" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4489,6 +4808,28 @@
         }
       }
     },
+    "Non configuré" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not configured"
+          }
+        }
+      }
+    },
+    "Non détecté" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not detected"
+          }
+        }
+      }
+    },
     "Nouveau dossier" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4720,6 +5061,17 @@
         }
       }
     },
+    "Outils IA compatibles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compatible AI Tools"
+          }
+        }
+      }
+    },
     "Ouverture du canal SFTP…" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4793,6 +5145,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open"
+          }
+        }
+      }
+    },
+    "Ouvrir automatiquement la connexion SSH à la demande de l'agent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatically open SSH connection on agent request"
           }
         }
       }
@@ -5248,6 +5611,17 @@
         }
       }
     },
+    "Reconnexion en cours" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reconnecting"
+          }
+        }
+      }
+    },
     "Redirection X11" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5354,6 +5728,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start over with an empty library"
+          }
+        }
+      }
+    },
+    "Retirer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
           }
         }
       }
@@ -5805,6 +6190,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Select an SSH tab, or choose “Browse Files (SFTP)” from a host's menu."
+          }
+        }
+      }
+    },
+    "TOML Codex" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex TOML"
           }
         }
       }
@@ -6491,6 +6887,17 @@
         }
       }
     },
+    "désactivé" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "disabled"
+          }
+        }
+      }
+    },
     "en attente" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6498,6 +6905,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "waiting"
+          }
+        }
+      }
+    },
+    "en écoute" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "listening"
           }
         }
       }
@@ -6729,6 +7147,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "not run"
+          }
+        }
+      }
+    },
+    "ouvrir la connexion SSH" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "open SSH connection"
           }
         }
       }
