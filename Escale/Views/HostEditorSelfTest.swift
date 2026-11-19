@@ -230,6 +230,27 @@ final class HostEditorSelfTest {
               && created?.serial == nil && created?.rdp == nil && created?.folderID == folder.id, created.map(json) ?? "absent")
         _ = await wait(10) { HostEditorForm.current == nil }
 
+        // 2b. Authentification par clé SSH directement dans l'onglet Basique.
+        if let kf = await openEditor(.newHost(folder: folder.id)) {
+            check("cle_basique_editeur_ouvert", kf.tab == .basic && kf.connectionProtocol == .ssh)
+            kf.hostname = "key.example.com"
+            kf.name = "Nouveau SSH Clé"
+            kf.authChoice = .keyFile
+            check("cle_basique_chemin_obligatoire", !kf.errors.isEmpty, "\(kf.errors)")
+            kf.keyPath = "/Users/test/.ssh/id_ed25519"
+            check("cle_basique_formulaire_valide", kf.errors.isEmpty, "\(kf.errors)")
+            await screenshot("ssh-cle-basique-clair")
+            kf.saveAction?()
+            check("cle_basique_feuille_fermee", await wait(10) { model.editor == nil })
+            let savedKeyHost = model.library.library.hosts.first { $0.name == "Nouveau SSH Clé" }
+            check("cle_basique_auth_enregistree",
+                  savedKeyHost?.auth == .keyFile(path: "/Users/test/.ssh/id_ed25519") && savedKeyHost?.folderID == folder.id,
+                  savedKeyHost.map(json) ?? "absent")
+            _ = await wait(10) { HostEditorForm.current == nil }
+        } else {
+            check("cle_basique_editeur_ouvert", false)
+        }
+
         // 3. Taille de feuille stable.
         check("taille_de_feuille_stable", sheetSizes.count == 1, "\(sheetSizes.sorted())")
 

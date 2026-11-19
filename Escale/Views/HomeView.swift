@@ -5,9 +5,17 @@ import EscaleCore
 /// Page d'accueil (l'onglet « Home » de MobaXterm) : connexion rapide, actions de départ, sessions récentes.
 /// Affichée quand aucun onglet n'est ouvert, ou à la demande par le bouton maison de la barre d'onglets.
 struct HomeView: View {
+    private enum QuickConnectAuth: Hashable {
+        case defaults
+        case keychain
+        case keyFile(String)
+    }
+
     @Bindable var model: AppModel
     @State private var target = ""
     @State private var rejected = false
+    @State private var selectedAuth: QuickConnectAuth = .defaults
+    @State private var discoveredKeys: [DiscoveredSSHKey] = []
     @FocusState private var fieldFocused: Bool
 
     var body: some View {
@@ -24,6 +32,7 @@ struct HomeView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.background)
+        .onAppear { discoveredKeys = SSHKeyDiscovery.discover() }
     }
 
     private var header: some View {
@@ -56,14 +65,160 @@ struct HomeView: View {
             .padding(.horizontal, 12).padding(.vertical, 9)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 9))
             .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(rejected ? AnyShapeStyle(.red) : AnyShapeStyle(.separator)))
+            HStack(spacing: 8) {
+                quickConnectAuthMenu
+                Spacer(minLength: 0)
+            }
             Text(rejected ? "Cible non reconnue. Format attendu : utilisateur@hôte:port (utilisateur et port facultatifs)."
                           : "Ouvre une session SSH et l'enregistre dans la bibliothèque. ⇧⌘K depuis n'importe où.")
                 .font(.caption).foregroundStyle(rejected ? AnyShapeStyle(.red) : AnyShapeStyle(.secondary))
         }
     }
 
+    private var quickAuthSymbol: String {
+        switch selectedAuth {
+        case .defaults: "key"
+        case .keychain: "lock"
+        case .keyFile: "key.fill"
+        }
+    }
+
+    private var quickAuthTitle: String {
+        switch selectedAuth {
+        case .defaults: String(localized: "Authentification : Par défaut (OpenSSH)")
+        case .keychain: String(localized: "Authentification : Mot de passe (Trousseau)")
+        case .keyFile(let path): String(localized: "Clé : \(SSHKeyDiscovery.abbreviatedPath(path))")
+        }
+    }
+
+    private var quickAuthHelp: String {
+        switch selectedAuth {
+        case .defaults: String(localized: "Choisir la méthode d'authentification ou une clé SSH pour la connexion rapide.")
+        case .keychain: String(localized: "Mot de passe (Trousseau)")
+        case .keyFile(let path): path
+        }
+    }
+
+    private var quickConnectAuthMenu: some View {
+        Menu {
+            Button {
+                selectedAuth = .defaults
+            } label: {
+                if selectedAuth == .defaults {
+                    Label("Réglages OpenSSH par défaut", systemImage: "checkmark")
+                } else {
+                    Text("Réglages OpenSSH par défaut")
+                }
+            }
+            Button {
+                selectedAuth = .keychain
+            } label: {
+                if selectedAuth == .keychain {
+                    Label("Mot de passe (Trousseau)", systemImage: "checkmark")
+                } else {
+                    Text("Mot de passe (Trousseau)")
+                }
+            }
+            if !discoveredKeys.isEmpty {
+                Divider()
+                ForEach(discoveredKeys) { key in
+                    Button {
+                        selectedAuth = .keyFile(key.path)
+                    } label: {
+                        let label = String(localized: "Clé : \(key.filename)")
+                        if selectedAuth == .keyFile(key.path) {
+                            Label(label, systemImage: "checkmark")
+                        } else {
+                            Text(label)
+                        }
+                    }
+                }
+            }
+            Divider()
+            Button("Choisir un fichier de clé…") { chooseQuickConnectKey() }
+        } label: {
+            HStack(spacing: 5) {
+                Image(systemName: quickAuthSymbol)
+                    .foregroundStyle(selectedAuth == .defaults ? AnyShapeStyle(.secondary) : AnyShapeStyle(.tint))
+                Text(quickAuthTitle)
+                    .lineLimit(1).truncationMode(.middle)
+            }
+            .font(.caption)
+        }
+        .menuStyle(.borderedButton)
+        .controlSize(.small)
+        .frame(maxWidth: 420, alignment: .leading)
+        .help(quickAuthHelp)
+        .accessibilityIdentifier("home.quickconnect.auth")
+    }
+
+    private func chooseQuickConnectKey() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.showsHiddenFiles = true
+        panel.directoryURL = SSHKeyDiscovery.defaultSSHDirectory
+        panel.prompt = String(localized: "Choisir")
+        panel.message = String(localized: "Choisissez le fichier de clé privée (il n'est jamais copié ni modifié).")
+        if panel.runModal() == .OK, let url = panel.url {
+            selectedAuth = .keyFile(url.path)
+            rejected = false
+        }
+    }
+
     private func submit() {
-        if model.quickConnect(target) { target = "" } else { rejected = true }
+        if selectedAuth == .defaults {
+            if model.quickConnect(target) { target = "" } else { rejected = true }
+            return
+        }
+        guard let parsed = QuickConnectTarget.parse(target) else {
+            rejected = true
+            return
+        }
+        if case .keyFile(let path) = selectedAuth, HostFormValidation.keyPath(path) != nil {
+            rejected = true
+            return
+        }
+        var profile: HostProfile
+        let previousAuth: HostProfile.Auth?
+        if let known = model.library.library.hosts.first(where: { parsed.matches($0) }) {
+            profile = known
+            previousAuth = known.auth
+        } else {
+            profile = parsed.makeProfile()
+            previousAuth = nil
+        }
+        let desiredAuth: HostProfile.Auth = switch selectedAuth {
+        case .defaults: .openSSHDefaults
+        case .keyFile(let path): .keyFile(path: path.trimmingCharacters(in: .whitespaces))
+        case .keychain: .keychainPassword(account: AuthKeychain.passwordAccount(for: profile.id))
+        }
+        if profile.auth != desiredAuth || previousAuth == nil {
+            profile.auth = desiredAuth
+            model.library.upsert(profile)
+            // Nettoyage des secrets orphelins si la méthode d'un hôte existant change.
+            if let oldAuth = previousAuth, oldAuth != desiredAuth {
+                let store = model.connections.secretStore, hid = profile.id
+                if case .keychainPassword = oldAuth {
+                    if case .keychainPassword = desiredAuth {
+                        // Même compte mot de passe conservé.
+                    } else {
+                        Task { try? await store.removeSecret(for: AuthKeychain.passwordAccount(for: hid)) }
+                    }
+                }
+                if case .keyFile = oldAuth {
+                    Task { try? await store.removeSecret(for: AuthKeychain.passphraseAccount(for: hid)) }
+                }
+            }
+        }
+        // Invariant 19 : jamais de session ouverte sur un hôte hors bibliothèque.
+        guard let saved = model.library.host(profile.id) else {
+            target = ""
+            return
+        }
+        model.connect(saved)
+        target = ""
     }
 
     private var actions: some View {

@@ -55,8 +55,11 @@ struct HostEditorSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var form = HostEditorForm()
+    @State private var discoveredKeys: [DiscoveredSSHKey] = []
     @State private var hasStoredSecret = false
     @State private var secretMessage: String?
+    @State private var hasStoredPassphrase = false
+    @State private var passphraseMessage: String?
     @State private var loaded = false
 
     private var errors: [String] { form.errors }
@@ -129,6 +132,9 @@ struct HostEditorSheet: View {
                     TextField("Utilisateur", text: $form.user, prompt: Text(form.isSSH ? "Utilisateur courant" : "facultatif"))
                 }
             }
+            if form.isSSH {
+                sshAuthSection
+            }
             Section {
                 TextField("Étiquettes", text: $form.tags, prompt: Text("prod, web"))
                 Picker("Dossier", selection: $form.folderID) {
@@ -139,7 +145,11 @@ struct HostEditorSheet: View {
         }
     }
 
-    @ViewBuilder private var advancedTab: some View {
+    private var keyDisplayLabel: String {
+        form.keyPath.isEmpty ? String(localized: "Aucun fichier choisi") : SSHKeyDiscovery.abbreviatedPath(form.keyPath)
+    }
+
+    private var sshAuthSection: some View {
         Section("Authentification") {
             Picker("Méthode", selection: $form.authChoice) {
                 Text("Réglages OpenSSH par défaut").tag(HostEditorAuthChoice.defaults)
@@ -149,17 +159,52 @@ struct HostEditorSheet: View {
             if form.authChoice == .keyFile {
                 LabeledContent("Clé privée") {
                     HStack(spacing: 8) {
-                        // Chemin long : troncature au milieu (début et nom du fichier restent lisibles), chemin complet en infobulle.
-                        Text(form.keyPath.isEmpty ? "Aucun fichier choisi" : form.keyPath)
-                            .foregroundStyle(form.keyPath.isEmpty ? .secondary : .primary)
-                            .lineLimit(1).truncationMode(.middle)
-                            .help(form.keyPath.isEmpty ? "Aucun fichier choisi" : form.keyPath)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                        if !discoveredKeys.isEmpty {
+                            Menu {
+                                ForEach(discoveredKeys) { key in
+                                    Button {
+                                        form.keyPath = key.path
+                                    } label: {
+                                        if form.keyPath == key.path {
+                                            Label(key.displayPath, systemImage: "checkmark")
+                                        } else {
+                                            Text(key.displayPath)
+                                        }
+                                    }
+                                }
+                                Divider()
+                                Button("Autre fichier…") { chooseKey() }
+                            } label: {
+                                Text(keyDisplayLabel)
+                                    .foregroundStyle(form.keyPath.isEmpty ? .secondary : .primary)
+                                    .lineLimit(1).truncationMode(.middle)
+                            }
+                            .menuStyle(.borderedButton)
+                            .help(form.keyPath.isEmpty ? String(localized: "Aucun fichier choisi") : form.keyPath)
+                            .frame(maxWidth: 260, alignment: .trailing)
+                        } else {
+                            // Chemin long : troncature au milieu (début et nom du fichier restent lisibles), chemin complet en infobulle.
+                            Text(keyDisplayLabel)
+                                .foregroundStyle(form.keyPath.isEmpty ? .secondary : .primary)
+                                .lineLimit(1).truncationMode(.middle)
+                                .help(form.keyPath.isEmpty ? String(localized: "Aucun fichier choisi") : form.keyPath)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
                         Button("Choisir…") { chooseKey() }
                     }
                 }
                 Text("Si la clé est protégée par une phrase de passe, elle vous sera demandée à la connexion.")
                     .font(.caption).foregroundStyle(.secondary)
+                if hasStoredPassphrase {
+                    HStack {
+                        Label("Une phrase de passe est enregistrée dans le Trousseau.", systemImage: "checkmark.seal")
+                            .font(.caption)
+                        Spacer()
+                        Button("Oublier") { forgetPassphrase() }.controlSize(.small)
+                    }
+                } else if let m = passphraseMessage {
+                    Text(m).font(.caption).foregroundStyle(.secondary)
+                }
             }
             if form.authChoice == .keychain {
                 Text("Le mot de passe est demandé à la première connexion. La case « Mémoriser dans le Trousseau » l'enregistre, après une connexion réussie.")
@@ -179,6 +224,9 @@ struct HostEditorSheet: View {
                 Text("Agent ssh, clés par défaut et ~/.ssh/config.").font(.caption).foregroundStyle(.secondary)
             }
         }
+    }
+
+    @ViewBuilder private var advancedTab: some View {
         Section {
             TextField("Bastions", text: $form.jumpHosts, prompt: Text("user@bastion:22, autre-bastion"))
         }
@@ -190,7 +238,11 @@ struct HostEditorSheet: View {
         guard !loaded else { return }
         loaded = true
         form.load(host: host, initialFolder: initialFolder)
-        if form.authChoice == .keychain { refreshStoredSecret() }
+        discoveredKeys = SSHKeyDiscovery.discover()
+        if host != nil {
+            refreshStoredSecret()
+            refreshStoredPassphrase()
+        }
     }
 
     private var account: String { form.account }
@@ -208,13 +260,31 @@ struct HostEditorSheet: View {
         }
     }
 
+    private func refreshStoredPassphrase() {
+        let store = model.connections.secretStore, account = form.passphraseAccount
+        Task { hasStoredPassphrase = ((try? await store.secret(for: account)) ?? nil) != nil }
+    }
+
+    private func forgetPassphrase() {
+        let store = model.connections.secretStore, account = form.passphraseAccount
+        Task {
+            do {
+                try await store.removeSecret(for: account)
+                hasStoredPassphrase = false
+                passphraseMessage = String(localized: "Phrase de passe oubliée.")
+            } catch {
+                passphraseMessage = "Suppression impossible : \(error)"
+            }
+        }
+    }
+
     private func chooseKey() {
         let panel = NSOpenPanel()
         panel.canChooseFiles = true
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
         panel.showsHiddenFiles = true
-        panel.directoryURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent(".ssh")
+        panel.directoryURL = SSHKeyDiscovery.defaultSSHDirectory
         panel.prompt = String(localized: "Choisir")
         panel.message = String(localized: "Choisissez le fichier de clé privée (il n'est jamais copié ni modifié).")
         if panel.runModal() == .OK, let url = panel.url { form.keyPath = url.path }
@@ -222,10 +292,18 @@ struct HostEditorSheet: View {
 
     private func save() {
         let h = form.makeProfile(base: host)
-        // Méthode quittée : le mot de passe enregistré ne doit pas rester orphelin dans le Trousseau.
-        if let old = host, case .keychainPassword = old.auth, form.authChoice != .keychain {
+        // Méthode quittée ou clé changée : aucun secret enregistré ne doit rester orphelin dans le Trousseau.
+        if let old = host {
             let store = model.connections.secretStore, hid = old.id
-            Task { try? await store.removeSecret(for: AuthKeychain.passwordAccount(for: hid)) }
+            if case .keychainPassword = old.auth, form.authChoice != .keychain {
+                Task { try? await store.removeSecret(for: AuthKeychain.passwordAccount(for: hid)) }
+            }
+            if case .keyFile(let oldPath) = old.auth {
+                let newPath = form.keyPath.trimmingCharacters(in: .whitespaces)
+                if form.authChoice != .keyFile || oldPath != newPath {
+                    Task { try? await store.removeSecret(for: AuthKeychain.passphraseAccount(for: hid)) }
+                }
+            }
         }
         let previousTunnels = host?.tunnels ?? []
         model.library.upsert(h)
